@@ -1,102 +1,129 @@
 <body>
-<html>
-<head>
-  <title>Grocery Store</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #F0F0F0;
-    }
-    h1 {
-      color: #4CAF50;
-    }
-    #search {
-      width: 80%;
-      margin: 20px auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    #search-input {
-      width: 70%;
-      padding: 10px;
-      border: 1px solid #CCC;
-      border-radius: 5px;
-    }
-    #search-button {
-      width: 10%;
-      padding: 10px;
-      border: none;
-      border-radius: 5px;
-      background-color: #4CAF50;
-      color: white;
-      cursor: pointer;
-    }
-    #items {
-      width: 80%;
-      margin: 20px auto;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      grid-gap: 20px;
-    }
-    .item {
-      border: 1px solid #CCC;
-      border-radius: 5px;
-      padding: 10px;
-      background-color: white;
-    }
-    .item-image {
-      width: 100%;
-      height: 150px;
-      object-fit: cover;
-    }
-    .item-name {
-      font-weight: bold;
-    }
-    .item-price {
-      color: #4CAF50;
-    }
-  </style>
-  <style>
-  #cart {
-    display: none;
-	position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.4);
-  }
-  #cart-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-  }
-</style>
-<style>
-  #cart-button {
-  background-color: #4CAF50;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  cursor: pointer;
-  width: 25%;
-  float: right
-  margin-left:0;
-}
+	<html>
+	<head>
+		<title>Grocery Store</title>
+			<style>
+					body {
+					  font-family: Arial, sans-serif;
+					  background-color: #F0F0F0;
+					}
+					h1 {
+					  color: #4CAF50;
+					}
+					#search {
+					  width: 80%;
+					  margin: 20px auto;
+					  display: flex;
+					  align-items: center;
+					  justify-content: center;
+					}
+					#search-input {
+					  width: 70%;
+					  padding: 10px;
+					  border: 1px solid #CCC;
+					  border-radius: 5px;
+					}
+					#search-button {
+					  width: 10%;
+					  padding: 10px;
+					  border: none;
+					  border-radius: 5px;
+					  background-color: #4CAF50;
+					  color: white;
+					  cursor: pointer;
+					}
+					#items {
+					  width: 80%;
+					  margin: 20px auto;
+					  display: grid;
+					  grid-template-columns: repeat(4, 1fr);
+					  grid-gap: 20px;
+					}
+					.item {
+					  border: 1px solid #CCC;
+					  border-radius: 5px;
+					  padding: 10px;
+					  background-color: white;
+					}
+					.item-image {
+					  width: 100%;
+					  height: 150px;
+					  object-fit: cover;
+					}
+					.item-name {
+					  font-weight: bold;
+					}
+					.item-price {
+					  color: #4CAF50;
+					}
+			</style>
+			<style>
+				  #cart {
+					display: none;
+					position: fixed;
+					z-index: 1;
+					left: 0;
+					top: 0;
+					width: 100%;
+					height: 100%;
+					overflow: auto;
+					background-color: rgba(0,0,0,0.4);
+				  }
+				  #cart-content {
+					background-color: #fefefe;
+					margin: 15% auto;
+					padding: 20px;
+					border: 1px solid #888;
+					width: 80%;
+				  }
+			</style>
+			<style>
+			  #cart-button {
+			  background-color: #4CAF50;
+			  color: white;
+			  padding: 10px 20px;
+			  border: none;
+			  cursor: pointer;
+			  width: 25%;
+			  float: right
+			  margin-left:0;
+			}
+			#cart-button:hover {
+			  opacity: 0.8;
+			}
+			</style>
+			<style>
+			  #login-button{
+			  background-color: #4CAF50;
+			  color: white;
+			  padding: 10px 20px;
+			  border: none;
+			  cursor: pointer;
+			  width: 10%;
+			  float: right
+			  margin-left:0;
+			}
+			#cart-button:hover {
+			  opacity: 0.8;
+			}
+			</style>
 
-#cart-button:hover {
-  opacity: 0.8;
-}
-</style>
-
-</head>
+	</head>
 <body>
   <h1>Welcome to Grocery Store</h1>
+ 
+	<button id="login-button" style="position: absolute; right: 12;">Login</button>
+	<div id="login-popup" style="display: none;">
+	  <form id="login-form">
+		<label for="email">Email:</label><br>
+		<input type="email" id="email" name="email"><br>
+		<label for="password">Password:</label><br>
+		<input type="password" id="password" name="password"><br>
+		<input type="submit" value="Submit">
+		<button type="button" id="close-login">Close</button>
+	  </form>
+	</div>
+
   <div id="search">
     <input id="search-input" type="text" placeholder="Search for items...">
     <button id="search-button">Search</button>
@@ -107,6 +134,7 @@
       <h2>Cart</h2>
       <ul id="cart-items"></ul>
       <button id="close-cart">Close</button>
+	  <button id="checkout-cart">Check out</button>
     </div>
   </div>
   <div id="items">
@@ -135,14 +163,12 @@
 	  <button class="add-to-cart">Add to Cart</button>
     </div>
   </div>
-  
 </body>
 </html>
   <script>
   document.getElementById('search-button').addEventListener('click', function() {
     var input = document.getElementById('search-input').value.toLowerCase();
     var items = document.getElementsByClassName('item');
-
     for (var i = 0; i < items.length; i++) {
       var name = items[i].getElementsByClassName('item-name')[0].innerText.toLowerCase();
 
@@ -153,9 +179,7 @@
       }
     }
   });
-
  var addToCartButtons = document.getElementsByClassName('add-to-cart');
-
 for (var i = 0; i < addToCartButtons.length; i++) {
   addToCartButtons[i].addEventListener('click', function() {
     var item = this.parentElement;
@@ -164,42 +188,33 @@ for (var i = 0; i < addToCartButtons.length; i++) {
     addToCart(name, price);
   });
 }
-
 function addToCart(name, price) {
   var cartItems = document.getElementById('cart-items');
   var existingItem = Array.from(cartItems.children).find(function(li) { return li.childNodes[0].nodeValue.startsWith(name); });
-
   if (existingItem) {
     var existingQuantity = parseInt(existingItem.childNodes[0].nodeValue.split(' x ')[1]);
     existingItem.childNodes[0].nodeValue = name + ' (' + price + ') x ' + (existingQuantity + 1);
   } else {
     var li = document.createElement('li');
-
     // Create and append the "Remove" button
     var removeButton = document.createElement('button');
     removeButton.innerText = 'Remove';
     removeButton.addEventListener('click', function() {
       removeFromCart(li, name, price);
     });
-
     li.appendChild(document.createTextNode(name + ' (' + price + ') x 1'));
     li.appendChild(removeButton);
     cartItems.appendChild(li);
   }
-
   updateTotal();
 }
-
-
 function updateTotal() {
   var cartItems = document.getElementById('cart-items');
   var totalElement = document.getElementById('total');
-  
   // Remove totalElement from the list before calculating the new total
   if (totalElement) {
     cartItems.removeChild(totalElement);
   }
-
   var total = 0;
   for (var i = 0; i < cartItems.children.length; i++) {
     var itemText = cartItems.children[i].innerText;
@@ -208,13 +223,11 @@ function updateTotal() {
     var quantity = parseInt(itemText.split(' x ')[1]);
     total += price * quantity;
   }
-
   // Create totalElement if it doesn't exist
   if (!totalElement) {
     totalElement = document.createElement('li');
     totalElement.id = 'total';
   }
-
   // Update and append totalElement to the end of the list
   totalElement.innerText = 'Total: $' + total.toFixed(2);
   cartItems.appendChild(totalElement);
@@ -222,7 +235,6 @@ function updateTotal() {
 function removeFromCart(itemElement, name, price) {
   var quantityText = itemElement.childNodes[0].nodeValue.split(' x ')[1];
   var quantity = parseInt(quantityText);
-
   if (quantity > 1) {
     // Decrease quantity by 1
     itemElement.childNodes[0].nodeValue = name + ' (' + price + ') x ' + (quantity - 1);
@@ -230,15 +242,12 @@ function removeFromCart(itemElement, name, price) {
     // Remove item from cart
     itemElement.parentElement.removeChild(itemElement);
   }
-
   updateTotal();
 }
 
 
 </script>
 <script>
-
-
   document.getElementById('cart-button').addEventListener('click', function() {
     document.getElementById('cart').style.display = 'block';
   });
@@ -262,6 +271,37 @@ window.onload = function() {
   }
 };
 </script>
+<script>
+  // Add event listener to the check-out button
+  document.getElementById('checkout-cart').addEventListener('click', function() {
+    var cartItems = document.getElementById('cart-items');
+    while (cartItems.firstChild) {
+      cartItems.removeChild(cartItems.firstChild);
+    }
+    updateTotal();
+  });
+</script>
 
+	<script>
+	// JavaScript for the login page
+
+document.getElementById('login-button').addEventListener('click', function() {
+  document.getElementById('login-popup').style.display = 'block';
+});
+
+document.getElementById('close-login').addEventListener('click', function() {
+  document.getElementById('login-popup').style.display = 'none';
+  // Clear the email and password fields
+  document.getElementById('email').value = '';
+  document.getElementById('password').value = '';
+});
+
+document.getElementById('login-form').addEventListener('submit', function(event) {
+  event.preventDefault(); // Prevent the form from being submitted to a server
+  var email = document.getElementById('email').value;
+  var password = document.getElementById('password').value;
+  // You can now use the email and password for authentication
+});
+</script>
 </body>
 </html>
