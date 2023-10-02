@@ -237,6 +237,8 @@ function removeFromCart(itemElement, name, price) {
 
 </script>
 <script>
+
+
   document.getElementById('cart-button').addEventListener('click', function() {
     document.getElementById('cart').style.display = 'block';
   });
@@ -245,5 +247,21 @@ function removeFromCart(itemElement, name, price) {
     document.getElementById('cart').style.display = 'none';
   });
 </script>
+
+<script>
+window.onload = function() {
+  var items = document.getElementsByClassName('item');
+  for (var i = 0; i < items.length; i++) {
+    items[i].addEventListener('click', function(event) {
+      if (event.target.className !== 'add-to-cart') {
+        var imgSrc = this.getElementsByTagName('img')[0].src;
+        var newWindow = window.open("", "Image", "width=600,height=600");
+        newWindow.document.write("<img src='" + imgSrc + "' alt='Image' style='width:100%;height:auto;'>");
+      }
+    });
+  }
+};
+</script>
+
 </body>
 </html>
