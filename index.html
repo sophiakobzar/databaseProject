@@ -1,0 +1,248 @@
+<body>
+<html>
+<head>
+  <title>Grocery Store</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #F0F0F0;
+    }
+    h1 {
+      color: #4CAF50;
+    }
+    #search {
+      width: 80%;
+      margin: 20px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #search-input {
+      width: 70%;
+      padding: 10px;
+      border: 1px solid #CCC;
+      border-radius: 5px;
+    }
+    #search-button {
+      width: 10%;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+    #items {
+      width: 80%;
+      margin: 20px auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-gap: 20px;
+    }
+    .item {
+      border: 1px solid #CCC;
+      border-radius: 5px;
+      padding: 10px;
+      background-color: white;
+    }
+    .item-image {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+    }
+    .item-name {
+      font-weight: bold;
+    }
+    .item-price {
+      color: #4CAF50;
+    }
+  </style>
+  <style>
+  #cart {
+    display: none;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+  }
+  #cart-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+  }
+</style>
+<style>
+  #cart-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  width: 25%;
+  float: right
+  margin-left:0;
+}
+
+#cart-button:hover {
+  opacity: 0.8;
+}
+</style>
+
+</head>
+<body>
+  <h1>Welcome to Grocery Store</h1>
+  <div id="search">
+    <input id="search-input" type="text" placeholder="Search for items...">
+    <button id="search-button">Search</button>
+  </div>
+  <button id="cart-button">Cart</button>
+  <div id="cart">
+    <div id="cart-content">
+      <h2>Cart</h2>
+      <ul id="cart-items"></ul>
+      <button id="close-cart">Close</button>
+    </div>
+  </div>
+  <div id="items">
+    <div class="item">
+      <img class="item-image" src="apple.jpg" alt="Apple">
+      <p class="item-name">Apple</p>
+      <p class="item-price">$0.99/lb</p>
+	  <button class="add-to-cart">Add to Cart</button>
+    </div>
+    <div class="item">
+      <img class="item-image" src="banana.jpg" alt="Banana">
+      <p class="item-name">Banana</p>
+      <p class="item-price">$0.69/lb</p>
+	  <button class="add-to-cart">Add to Cart</button>
+    </div>
+    <div class="item">
+      <img class="item-image" src="carrot.jpg" alt="Carrot">
+      <p class="item-name">Carrot</p>
+      <p class="item-price">$0.49/lb</p>
+	  <button class="add-to-cart">Add to Cart</button>    
+	 </div>
+    <div class="item">
+      <img class="item-image" src="milk.jpg" alt="Milk">
+      <p class="item-name">Milk</p>
+      <p class="item-price">$3.99/gal</p>
+	  <button class="add-to-cart">Add to Cart</button>
+    </div>
+  </div>
+  
+</body>
+</html>
+  <script>
+  document.getElementById('search-button').addEventListener('click', function() {
+    var input = document.getElementById('search-input').value.toLowerCase();
+    var items = document.getElementsByClassName('item');
+
+    for (var i = 0; i < items.length; i++) {
+      var name = items[i].getElementsByClassName('item-name')[0].innerText.toLowerCase();
+
+      if (name.indexOf(input) > -1) {
+        items[i].style.display = '';
+      } else {
+        items[i].style.display = 'none';
+      }
+    }
+  });
+
+ var addToCartButtons = document.getElementsByClassName('add-to-cart');
+
+for (var i = 0; i < addToCartButtons.length; i++) {
+  addToCartButtons[i].addEventListener('click', function() {
+    var item = this.parentElement;
+    var name = item.getElementsByClassName('item-name')[0].innerText;
+    var price = item.getElementsByClassName('item-price')[0].innerText;
+    addToCart(name, price);
+  });
+}
+
+function addToCart(name, price) {
+  var cartItems = document.getElementById('cart-items');
+  var existingItem = Array.from(cartItems.children).find(function(li) { return li.childNodes[0].nodeValue.startsWith(name); });
+
+  if (existingItem) {
+    var existingQuantity = parseInt(existingItem.childNodes[0].nodeValue.split(' x ')[1]);
+    existingItem.childNodes[0].nodeValue = name + ' (' + price + ') x ' + (existingQuantity + 1);
+  } else {
+    var li = document.createElement('li');
+
+    // Create and append the "Remove" button
+    var removeButton = document.createElement('button');
+    removeButton.innerText = 'Remove';
+    removeButton.addEventListener('click', function() {
+      removeFromCart(li, name, price);
+    });
+
+    li.appendChild(document.createTextNode(name + ' (' + price + ') x 1'));
+    li.appendChild(removeButton);
+    cartItems.appendChild(li);
+  }
+
+  updateTotal();
+}
+
+
+function updateTotal() {
+  var cartItems = document.getElementById('cart-items');
+  var totalElement = document.getElementById('total');
+  
+  // Remove totalElement from the list before calculating the new total
+  if (totalElement) {
+    cartItems.removeChild(totalElement);
+  }
+
+  var total = 0;
+  for (var i = 0; i < cartItems.children.length; i++) {
+    var itemText = cartItems.children[i].innerText;
+    var priceText = itemText.split('(')[1].split(')')[0];
+    var price = parseFloat(priceText.split('/')[0].substring(1)); // Get price value
+    var quantity = parseInt(itemText.split(' x ')[1]);
+    total += price * quantity;
+  }
+
+  // Create totalElement if it doesn't exist
+  if (!totalElement) {
+    totalElement = document.createElement('li');
+    totalElement.id = 'total';
+  }
+
+  // Update and append totalElement to the end of the list
+  totalElement.innerText = 'Total: $' + total.toFixed(2);
+  cartItems.appendChild(totalElement);
+}
+function removeFromCart(itemElement, name, price) {
+  var quantityText = itemElement.childNodes[0].nodeValue.split(' x ')[1];
+  var quantity = parseInt(quantityText);
+
+  if (quantity > 1) {
+    // Decrease quantity by 1
+    itemElement.childNodes[0].nodeValue = name + ' (' + price + ') x ' + (quantity - 1);
+  } else {
+    // Remove item from cart
+    itemElement.parentElement.removeChild(itemElement);
+  }
+
+  updateTotal();
+}
+
+
+</script>
+<script>
+  document.getElementById('cart-button').addEventListener('click', function() {
+    document.getElementById('cart').style.display = 'block';
+  });
+  
+  document.getElementById('close-cart').addEventListener('click', function() {
+    document.getElementById('cart').style.display = 'none';
+  });
+</script>
+</body>
+</html>
