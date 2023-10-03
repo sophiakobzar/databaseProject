@@ -1,4 +1,4 @@
-﻿apple.jpg,Apple,$0.99/lb
-banana.jpg,Banana,$0.59/lb
-carrot.jpg,Carrot,$0.79/lb
-milk.jpg,Milk,$3.79/gal
+﻿﻿apple.jpg,Apple,$0.99/lb,0
+banana.jpg,Banana,$0.59/lb,1
+carrot.jpg,Carrot,$0.79/lb,1
+milk.jpg,Milk,$3.79/gal,0

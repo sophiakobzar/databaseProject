@@ -295,5 +295,45 @@ document.getElementById('login-form').addEventListener('submit', function(event)
   // You can now use the email and password for authentication
 });
 </script>
+
+<script>
+// JavaScript for the check out
+document.getElementById('checkout-cart').addEventListener('click', function() {
+  // Get all cart items
+  var cartItems = document.getElementById('cart-items').children;
+  Array.from(cartItems).forEach(function(item) {
+    var itemText = item.innerText;
+    var name = itemText.split(' (')[0];
+    var quantity = parseInt(itemText.split(' x ')[1]);
+    
+    // Send POST request to server-side script
+    fetch('/databaseProject/update-quantity.php', {  // <-- change this URL to your server-side script
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name: name, quantity: quantity }),
+    })
+    .then(response => response.text())
+    .then(data => {
+      console.log('Success:', data);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+  });
+  
+  // Clear the cart
+  while (cartItems.length > 0) {
+    cartItems[0].parentNode.removeChild(cartItems[0]);
+  }
+  
+  // Update total
+  updateTotal();
+});
+
+
+
+</script>
 </body>
 </html>
