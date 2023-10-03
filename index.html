@@ -112,17 +112,17 @@
 <body>
   <h1>Welcome to Grocery Store</h1>
  
-	<button id="login-button" style="position: absolute; right: 12;">Login</button>
-	<div id="login-popup" style="display: none;">
-	  <form id="login-form">
-		<label for="email">Email:</label><br>
-		<input type="email" id="email" name="email"><br>
-		<label for="password">Password:</label><br>
-		<input type="password" id="password" name="password"><br>
-		<input type="submit" value="Submit">
-		<button type="button" id="close-login">Close</button>
-	  </form>
-	</div>
+  <button id="login-button" style="position: absolute; right: 12;">Login</button>
+  <div id="login-popup" style="display: none;">
+    <form id="login-form">
+      <label for="email">Email:</label><br>
+      <input type="email" id="email" name="email"><br>
+      <label for="password">Password:</label><br>
+      <input type="password" id="password" name="password"><br>
+      <input type="submit" value="Submit">
+      <button type="button" id="close-login">Close</button>
+    </form>
+  </div>
 
   <div id="search">
     <input id="search-input" type="text" placeholder="Search for items...">
@@ -134,38 +134,63 @@
       <h2>Cart</h2>
       <ul id="cart-items"></ul>
       <button id="close-cart">Close</button>
-	  <button id="checkout-cart">Check out</button>
+      <button id="checkout-cart">Check out</button>
     </div>
   </div>
-  <div id="items">
-    <div class="item">
-      <img class="item-image" src="apple.jpg" alt="Apple">
-      <p class="item-name">Apple</p>
-      <p class="item-price">$0.99/lb</p>
-	  <button class="add-to-cart">Add to Cart</button>
-    </div>
-    <div class="item">
-      <img class="item-image" src="banana.jpg" alt="Banana">
-      <p class="item-name">Banana</p>
-      <p class="item-price">$0.69/lb</p>
-	  <button class="add-to-cart">Add to Cart</button>
-    </div>
-    <div class="item">
-      <img class="item-image" src="carrot.jpg" alt="Carrot">
-      <p class="item-name">Carrot</p>
-      <p class="item-price">$0.49/lb</p>
-	  <button class="add-to-cart">Add to Cart</button>    
-	 </div>
-    <div class="item">
-      <img class="item-image" src="milk.jpg" alt="Milk">
-      <p class="item-name">Milk</p>
-      <p class="item-price">$3.99/gal</p>
-	  <button class="add-to-cart">Add to Cart</button>
-    </div>
-  </div>
+
+  <!-- This is where the items from your CSV file will be inserted -->
+  <div id="items"></div>
+
+  <!-- Include the Papa Parse library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 </body>
 </html>
-  <script>
+<script>
+window.onload = function() {
+  fetch('items.csv')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('HTTP error ' + response.status);
+      }
+      return response.text();
+    })
+    .then(data => {
+      console.log('CSV file opened successfully');
+      const items = data.split('\n').map(line => line.split(','));
+      const itemsDiv = document.getElementById('items');
+      items.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'item';
+        div.innerHTML = `
+          <img class="item-image" src="${item[0]}" alt="${item[1]}">
+          <p class="item-name">${item[1]}</p>
+          <p class="item-price">${item[2]}</p>
+          <button class="add-to-cart">Add to Cart</button>
+        `;
+        itemsDiv.appendChild(div);
+      });
+      // Add event listeners after items have been added
+      addEventListeners();
+    })
+    .catch(error => {
+      console.log('Failed to open CSV file: ' + error.message);
+    });
+}
+
+function addEventListeners() {
+  // Add to Cart buttons
+  var addToCartButtons = document.getElementsByClassName('add-to-cart');
+  for (var i = 0; i < addToCartButtons.length; i++) {
+    addToCartButtons[i].addEventListener('click', function() {
+      var item = this.parentElement;
+      var name = item.getElementsByClassName('item-name')[0].innerText;
+      var price = item.getElementsByClassName('item-price')[0].innerText;
+      addToCart(name, price);
+    });
+  }
+
+  // Other event listeners...
+  // Search button
   document.getElementById('search-button').addEventListener('click', function() {
     var input = document.getElementById('search-input').value.toLowerCase();
     var items = document.getElementsByClassName('item');
@@ -179,15 +204,18 @@
       }
     }
   });
- var addToCartButtons = document.getElementsByClassName('add-to-cart');
-for (var i = 0; i < addToCartButtons.length; i++) {
-  addToCartButtons[i].addEventListener('click', function() {
-    var item = this.parentElement;
-    var name = item.getElementsByClassName('item-name')[0].innerText;
-    var price = item.getElementsByClassName('item-price')[0].innerText;
-    addToCart(name, price);
+
+  // Cart button
+  document.getElementById('cart-button').addEventListener('click', function() {
+    document.getElementById('cart').style.display = 'block';
   });
-}
+
+  // Close cart button
+  document.getElementById('close-cart').addEventListener('click', function() {
+    document.getElementById('cart').style.display = 'none';
+  });
+};
+
 function addToCart(name, price) {
   var cartItems = document.getElementById('cart-items');
   var existingItem = Array.from(cartItems.children).find(function(li) { return li.childNodes[0].nodeValue.startsWith(name); });
@@ -208,6 +236,7 @@ function addToCart(name, price) {
   }
   updateTotal();
 }
+
 function updateTotal() {
   var cartItems = document.getElementById('cart-items');
   var totalElement = document.getElementById('total');
@@ -216,13 +245,13 @@ function updateTotal() {
     cartItems.removeChild(totalElement);
   }
   var total = 0;
-  for (var i = 0; i < cartItems.children.length; i++) {
-    var itemText = cartItems.children[i].innerText;
+  Array.from(cartItems.children).forEach(function(item) {
+    var itemText = item.innerText;
     var priceText = itemText.split('(')[1].split(')')[0];
     var price = parseFloat(priceText.split('/')[0].substring(1)); // Get price value
     var quantity = parseInt(itemText.split(' x ')[1]);
     total += price * quantity;
-  }
+  });
   // Create totalElement if it doesn't exist
   if (!totalElement) {
     totalElement = document.createElement('li');
@@ -232,6 +261,7 @@ function updateTotal() {
   totalElement.innerText = 'Total: $' + total.toFixed(2);
   cartItems.appendChild(totalElement);
 }
+
 function removeFromCart(itemElement, name, price) {
   var quantityText = itemElement.childNodes[0].nodeValue.split(' x ')[1];
   var quantity = parseInt(quantityText);
@@ -245,57 +275,19 @@ function removeFromCart(itemElement, name, price) {
   updateTotal();
 }
 
-
-</script>
-<script>
-  document.getElementById('cart-button').addEventListener('click', function() {
-    document.getElementById('cart').style.display = 'block';
-  });
-  
-  document.getElementById('close-cart').addEventListener('click', function() {
-    document.getElementById('cart').style.display = 'none';
-  });
 </script>
 
 <script>
-window.onload = function() {
-  var items = document.getElementsByClassName('item');
-  for (var i = 0; i < items.length; i++) {
-    items[i].addEventListener('click', function(event) {
-      if (event.target.className !== 'add-to-cart') {
-        var imgSrc = this.getElementsByTagName('img')[0].src;
-        var newWindow = window.open("", "Image", "width=600,height=600");
-        newWindow.document.write("<img src='" + imgSrc + "' alt='Image' style='width:100%;height:auto;'>");
-      }
-    });
-  }
-};
-</script>
-<script>
-  // Add event listener to the check-out button
-  document.getElementById('checkout-cart').addEventListener('click', function() {
-    var cartItems = document.getElementById('cart-items');
-    while (cartItems.firstChild) {
-      cartItems.removeChild(cartItems.firstChild);
-    }
-    updateTotal();
-  });
-</script>
-
-	<script>
-	// JavaScript for the login page
-
+// JavaScript for the login page
 document.getElementById('login-button').addEventListener('click', function() {
   document.getElementById('login-popup').style.display = 'block';
 });
-
 document.getElementById('close-login').addEventListener('click', function() {
   document.getElementById('login-popup').style.display = 'none';
   // Clear the email and password fields
   document.getElementById('email').value = '';
   document.getElementById('password').value = '';
 });
-
 document.getElementById('login-form').addEventListener('submit', function(event) {
   event.preventDefault(); // Prevent the form from being submitted to a server
   var email = document.getElementById('email').value;
