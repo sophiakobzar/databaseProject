@@ -147,24 +147,23 @@
 </html>
 <script>
 window.onload = function() {
-  fetch('items.csv')
+ fetch('fetch_items.php')
     .then(response => {
       if (!response.ok) {
         throw new Error('HTTP error ' + response.status);
       }
-      return response.text();
+      return response.json();
     })
-    .then(data => {
-      console.log('CSV file opened successfully');
-      const items = data.split('\n').map(line => line.split(','));
+    .then(items => {
+      console.log('Items fetched successfully');
       const itemsDiv = document.getElementById('items');
       items.forEach(item => {
         const div = document.createElement('div');
         div.className = 'item';
         div.innerHTML = `
-          <img class="item-image" src="${item[0]}" alt="${item[1]}">
-          <p class="item-name">${item[1]}</p>
-          <p class="item-price">${item[2]}</p>
+          <img class="item-image" src="${item.imageName}" alt="${item.itemName}">
+          <p class="item-name">${item.itemName}</p>
+          <p class="item-price">${item.price}</p>
           <button class="add-to-cart">Add to Cart</button>
         `;
         itemsDiv.appendChild(div);
@@ -173,7 +172,7 @@ window.onload = function() {
       addEventListeners();
     })
     .catch(error => {
-      console.log('Failed to open CSV file: ' + error.message);
+      console.log('Failed to fetch items: ' + error.message);
     });
 }
 
