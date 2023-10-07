@@ -296,43 +296,43 @@ document.getElementById('login-form').addEventListener('submit', function(event)
 </script>
 
 <script>
-// JavaScript for the check out
+// JavaScript for the checkout
 document.getElementById('checkout-cart').addEventListener('click', function() {
   // Get all cart items
   var cartItems = document.getElementById('cart-items').children;
+  var itemsToUpdate = [];
+
   Array.from(cartItems).forEach(function(item) {
     var itemText = item.innerText;
     var name = itemText.split(' (')[0];
     var quantity = parseInt(itemText.split(' x ')[1]);
-    
-    // Send POST request to server-side script
-    fetch('/databaseProject/update-quantity.php', {  // <-- change this URL to your server-side script
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ name: name, quantity: quantity }),
-    })
-    .then(response => response.text())
-    .then(data => {
-      console.log('Success:', data);
+
+    itemsToUpdate.push({ name: name, quantity: quantity });
+  });
+
+  // Send POST request to update quantities
+  fetch('/databaseProject/update-quantities.php', { // Replace with the correct server-side script URL
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ itemsToUpdate: itemsToUpdate }),
+  })
+    .then(response => response.json())
+    .then(updatedItems => {
+      console.log('Updated quantities:', updatedItems);
+      // Clear the cart
+      while (cartItems.length > 0) {
+        cartItems[0].parentNode.removeChild(cartItems[0]);
+      }
+      // Update the total
+      updateTotal();
     })
     .catch((error) => {
-      console.error('Error:', error);
+      console.error('Error:', error); // this is where the error this
     });
-  });
-  
-  // Clear the cart
-  while (cartItems.length > 0) {
-    cartItems[0].parentNode.removeChild(cartItems[0]);
-  }
-  
-  // Update total
-  updateTotal();
 });
-
-
-
 </script>
+
 </body>
 </html>
