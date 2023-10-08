@@ -30,18 +30,15 @@ if ($data && isset($data['itemsToUpdate']) && is_array($data['itemsToUpdate'])) 
       // Error occurred, log the error
       error_log("Error updating quantity: " . $stmt->error);
     }
-    
     // Close the statement
     $stmt->close();
   }
-
   // Send back a response with the updated quantities
   echo json_encode($data['itemsToUpdate']);
 } else {
   // Handle invalid or missing data
   echo json_encode(['error' => 'Invalid data']);
 }
-
 // Close the database connection
 $conn->close();
 ?>

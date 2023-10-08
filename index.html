@@ -311,7 +311,7 @@ document.getElementById('checkout-cart').addEventListener('click', function() {
   });
 
   // Send POST request to update quantities
-  fetch('/databaseProject/update-quantities.php', { // Replace with the correct server-side script URL
+  fetch('/databaseProject/update-quantities.php', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -321,17 +321,38 @@ document.getElementById('checkout-cart').addEventListener('click', function() {
     .then(response => response.json())
     .then(updatedItems => {
       console.log('Updated quantities:', updatedItems);
-      // Clear the cart
-      while (cartItems.length > 0) {
-        cartItems[0].parentNode.removeChild(cartItems[0]);
-      }
-      // Update the total
-      updateTotal();
+
+      // Once quantities are updated, proceed to add the order
+      placeOrder(itemsToUpdate);
     })
     .catch((error) => {
-      console.error('Error:', error); // this is where the error this
+      console.error('Error updating quantities:', error);
     });
 });
+
+function placeOrder(itemsToUpdate) {
+  // Send POST request to addToOrder.php to create an order
+fetch('addToOrder.php', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({ itemsToUpdate: itemsToUpdate }),
+})
+  .then(response => {
+    console.log('Response status:', response.status);
+    console.log('Response headers:', response.headers);
+    return response.text(); // Read the entire response as text
+  })
+  .then(responseText => {
+    console.log('Response content:', responseText);
+
+    // Handle the response here
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+}
 </script>
 
 </body>
