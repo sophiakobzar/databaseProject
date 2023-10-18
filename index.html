@@ -311,7 +311,7 @@ document.getElementById('checkout-cart').addEventListener('click', function() {
   });
 
   // Send POST request to update quantities
-  fetch('/databaseProject/update-quantities.php', { // Replace with the correct server-side script URL
+  fetch('/databaseProject/update-quantities.php', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
