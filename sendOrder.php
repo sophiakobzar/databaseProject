@@ -6,7 +6,7 @@ $dbname = "grocerystore";
 
 // Get the JSON data sent from the client
 $data = json_decode(file_get_contents('php://input'), true);
-error_log("Received data from the client: " . print_r($data, true));
+error_log("Received data from client: " . print_r($data, true));
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -39,6 +39,8 @@ function generateUniqueOrderID($conn) {
 $data = json_decode(file_get_contents('php://input'), true);
 
 if ($data && isset($data['itemsToUpdate']) && is_array($data['itemsToUpdate'])) {
+    $totalPrice = 0; // Initialize the total price
+
     foreach ($data['itemsToUpdate'] as $item) {
         $itemName = $item['name'];
         $quantity = $item['quantity'];
@@ -53,17 +55,34 @@ if ($data && isset($data['itemsToUpdate']) && is_array($data['itemsToUpdate'])) 
             // Error occurred, log the error
             error_log("Error updating quantity: " . $stmt->error);
         }
+
+        // Get the price of the item from the database
+        $priceQuery = $conn->query("SELECT price FROM items WHERE itemName = '$itemName'");
+        $priceRow = $priceQuery->fetch_assoc();
+        $itemPrice = $priceRow['price'];
+
+        // Calculate the item subtotal and add it to the total price
+        $itemSubtotal = $itemPrice * $quantity;
+        $totalPrice += $itemSubtotal;
+
         // Close the statement
         $stmt->close();
     }
 
-    // Remove the order submission code
-    // Calculate the total price
-    //$totalPrice = calculateTotalPrice($conn, $data['itemsToUpdate']);
-    //$totalPrice = '$9.09';
+    // Insert the order into the `order` table
+    $orderID = generateUniqueOrderID($conn);
+    $stmt = $conn->prepare("INSERT INTO `order` (`OrderID`, `totalPrice`) VALUES (?, ?");
+    $stmt->bind_param("id", $orderID, $totalPrice);
 
-    // The order submission code has been removed, and no order is inserted
-
+    if ($stmt->execute()) {
+        // Order inserted successfully
+        echo json_encode(['message' => 'Order placed successfully']);
+    } else {
+        // Error occurred, log the error
+        error_log("Error inserting order: " . $stmt->error);
+        echo json_encode(['error' => 'Failed to place the order']);
+    }
+    $stmt->close();
 } else {
     // Handle invalid or missing data
     echo json_encode(['error' => 'Invalid data']);

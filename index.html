@@ -311,28 +311,67 @@ document.getElementById('checkout-cart').addEventListener('click', function() {
   });
 
   // Send POST request to update quantities
-  fetch('/databaseProject/update-quantities.php', { // Replace with the correct server-side script URL
+  fetch('/databaseProject/update-quantities.php', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ itemsToUpdate: itemsToUpdate }),
   })
-    .then(response => response.json())
-    .then(updatedItems => {
-      console.log('Updated quantities:', updatedItems);
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.text(); // Change to text() to handle non-JSON responses
+  })
+  .then(responseText => {
+    // Check if responseText contains an error message
+    if (responseText && responseText.includes('error')) {
+      console.error('Error:', responseText); // Log the error
+    } else {
+      console.log('Quantities updated successfully');
       // Clear the cart
       while (cartItems.length > 0) {
         cartItems[0].parentNode.removeChild(cartItems[0]);
       }
       // Update the total
       updateTotal();
-    })
-    .catch((error) => {
-      console.error('Error:', error); // this is where the error this
-    });
+      
+      // Send the order after updating quantities
+      sendOrder();
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error); // Log the error
+  });
 });
-</script>
+
+// Function to send the order
+function sendOrder() {
+  fetch('/databaseProject/sendOrder.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ /* order data goes here */ }),
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
+  .then(data => {
+    // Handle the response from sendOrder.php
+    //console.log(data);
+  })
+  .catch(error => {
+    console.error('Error sending order:', error);
+  });
+}
+
+</script> <! line 347>
+
 
 </body>
 </html>
