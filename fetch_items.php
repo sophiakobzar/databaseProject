@@ -12,7 +12,7 @@ if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "SELECT imageName, itemName, price, quantity FROM items WHERE quantity > 0";
+$sql = "SELECT imageName, itemID, itemName, price, quantity FROM items WHERE quantity > 0";
 $result = $conn->query($sql);
 
 $items = array();

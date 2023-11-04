@@ -34,30 +34,14 @@ function generateUniqueOrderID($conn) {
 // Get the JSON data sent from the client
 $data = json_decode(file_get_contents('php://input'), true);
 
-if ($data && isset($data['itemsToUpdate']) && is_array($data['itemsToUpdate'])) {
-  foreach ($data['itemsToUpdate'] as $item) {
-    $itemName = $item['name'];
-    $quantity = $item['quantity'];
-    
-    // Update the quantity using prepared statements to prevent SQL injection
-    $stmt = $conn->prepare("UPDATE items SET quantity = quantity - ? WHERE itemName = ?");
-    $stmt->bind_param("is", $quantity, $itemName);
-    
-    if ($stmt->execute()) {
-      // Quantity updated successfully
-    } else {
-      // Error occurred, log the error
-      error_log("Error updating quantity: " . $stmt->error);
-    }
-    // Close the statement
-    $stmt->close();
-  }
+if ($data && isset($data['itemsToUpdate']) && is_array($data['itemsToUpdate']) && isset($data['total'])) {
+  
   
   // Generate a unique OrderID
   $orderID = generateUniqueOrderID($conn);
   
   // Insert the order into the `order` table
-  $totalPrice = 1.98; // You can set the total price here
+  $totalPrice = $data['total']; // You can set the total price here
   $stmt = $conn->prepare("INSERT INTO `order` (`OrderID`, `totalPrice`) VALUES (?, ?)");
   $stmt->bind_param("id", $orderID, $totalPrice);
   
@@ -70,6 +54,42 @@ if ($data && isset($data['itemsToUpdate']) && is_array($data['itemsToUpdate'])) 
     echo json_encode(['error' => 'Failed to place the order']);
   }
   $stmt->close();
+  
+  foreach ($data['itemsToUpdate'] as $item) {
+    $itemID = $item['itemID'];
+    $quantity = $item['quantity'];
+    
+    // Update the quantity using prepared statements to prevent SQL injection
+    $stmt = $conn->prepare("UPDATE items SET quantity = quantity - ? WHERE itemID = ?");
+    $stmt->bind_param("is", $quantity, $itemID);
+    
+    if ($stmt->execute()) {
+      // Quantity updated successfully
+    } else {
+      // Error occurred, log the error
+      error_log("Error updating quantity: " . $stmt->error);
+    }
+    // Close the statement
+    $stmt->close();
+  }
+  
+  foreach ($data['itemsToUpdate'] as $item) {
+    $itemID = $item['itemID'];
+    $quantity = $item['quantity'];
+    
+    // Update the quantity using prepared statements to prevent SQL injection
+    $stmt = $conn->prepare("INSERT INTO `partof` (`OrderID`, `itemID`, 'quantity') VALUES (?, ?, ?)");
+    $stmt->bind_param("iii", $orderID, $itemID, $quantity);
+    
+    if ($stmt->execute()) {
+      // Quantity updated successfully
+    } else {
+      // Error occurred, log the error
+      error_log("Error updating partof table: " . $stmt->error);
+    }
+    // Close the statement
+    $stmt->close();
+  }
   
 } else {
   // Handle invalid or missing data

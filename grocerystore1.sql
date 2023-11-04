@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `customer` (
   `Name` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
+  `password` varchar(255),
   `customerID` int(11) NOT NULL,
   `Payment Method` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL
@@ -63,12 +63,12 @@ CREATE TABLE `items` (
 --
 
 INSERT INTO `items` (`imageName`, `itemName`, `price`, `quantity`, `returnable`, `warehouseID`, `itemID`) VALUES
-('milk.jpg', 'Milk', '$0.99/lb', '5', 1, 567, 1209),
-('eggs.jpg', 'Eggs', '$3.00/ea', '5', 1, 987, 2531),
-('banana.jpg', 'Banana', '$0.59/lb', '5', 1, 123, 4917),
-('apple.jpg', 'Apple', '$0.99/lb', '4', 1, 567, 6382),
-('carrot.jpg', 'Carrot', '$0.79/lb', '5', 1, 123, 8765),
-('orange.jpg', 'Orange', '$1.59/lb', '5', 1, 123, 9487);
+('milk.jpg', 'Milk', '$0.99/lb', '45', 1, 567, 1209),
+('eggs.jpg', 'Eggs', '$3.00/ea', '55', 1, 987, 2531),
+('banana.jpg', 'Banana', '$0.59/lb', '25', 1, 123, 4917),
+('apple.jpg', 'Apple', '$0.99/lb', '64', 1, 567, 6382),
+('carrot.jpg', 'Carrot', '$0.79/lb', '95', 1, 123, 8765),
+('orange.jpg', 'Orange', '$1.59/lb', '55', 1, 123, 9487);
 
 -- --------------------------------------------------------
 
@@ -166,8 +166,8 @@ ALTER TABLE `order`
 -- Constraints for table `partof`
 --
 ALTER TABLE `partof`
-  ADD CONSTRAINT `partof_ibfk_1` FOREIGN KEY (`OrderID`) REFERENCES `order` (`OrderID`),
-  ADD CONSTRAINT `partof_ibfk_2` FOREIGN KEY (`ItemID`) REFERENCES `items` (`itemID`);
+  ADD CONSTRAINT `partof_ibfk_1` FOREIGN KEY (`OrderID`) REFERENCES `order` (`OrderID`) ON DELETE CASCADE,
+  ADD CONSTRAINT `partof_ibfk_2` FOREIGN KEY (`ItemID`) REFERENCES `items` (`itemID`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

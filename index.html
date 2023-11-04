@@ -86,7 +86,6 @@
 			  cursor: pointer;
 			  width: 25%;
 			  float: right
-			  margin-left:0;
 			}
 			#cart-button:hover {
 			  opacity: 0.8;
@@ -101,7 +100,6 @@
 			  cursor: pointer;
 			  width: 10%;
 			  float: right
-			  margin-left:0;
 			}
 			#cart-button:hover {
 			  opacity: 0.8;
@@ -133,6 +131,7 @@
     <div id="cart-content">
       <h2>Cart</h2>
       <ul id="cart-items"></ul>
+      <h3>Total: <span id= "total"></span></h3>
       <button id="close-cart">Close</button>
       <button id="checkout-cart">Check out</button>
     </div>
@@ -160,6 +159,7 @@ window.onload = function() {
       items.forEach(item => {
         const div = document.createElement('div');
         div.className = 'item';
+        div.dataset.itemID = item.itemID;
         div.innerHTML = `
           <img class="item-image" src="${item.imageName}" alt="${item.itemName}">
           <p class="item-name">${item.itemName}</p>
@@ -184,7 +184,7 @@ function addEventListeners() {
       var item = this.parentElement;
       var name = item.getElementsByClassName('item-name')[0].innerText;
       var price = item.getElementsByClassName('item-price')[0].innerText;
-      addToCart(name, price);
+      addToCart(name, price, item.dataset.itemID);
     });
   }
 
@@ -215,7 +215,7 @@ function addEventListeners() {
   });
 };
 
-function addToCart(name, price) {
+function addToCart(name, price, itemID) {
   var cartItems = document.getElementById('cart-items');
   var existingItem = Array.from(cartItems.children).find(function(li) { return li.childNodes[0].nodeValue.startsWith(name); });
   if (existingItem) {
@@ -229,6 +229,7 @@ function addToCart(name, price) {
     removeButton.addEventListener('click', function() {
       removeFromCart(li, name, price);
     });
+    li.dataset.itemID = itemID;
     li.appendChild(document.createTextNode(name + ' (' + price + ') x 1'));
     li.appendChild(removeButton);
     cartItems.appendChild(li);
@@ -236,14 +237,11 @@ function addToCart(name, price) {
   updateTotal();
 }
 
+var total = 0;
+
 function updateTotal() {
   var cartItems = document.getElementById('cart-items');
-  var totalElement = document.getElementById('total');
   // Remove totalElement from the list before calculating the new total
-  if (totalElement) {
-    cartItems.removeChild(totalElement);
-  }
-  var total = 0;
   Array.from(cartItems.children).forEach(function(item) {
     var itemText = item.innerText;
     var priceText = itemText.split('(')[1].split(')')[0];
@@ -251,14 +249,7 @@ function updateTotal() {
     var quantity = parseInt(itemText.split(' x ')[1]);
     total += price * quantity;
   });
-  // Create totalElement if it doesn't exist
-  if (!totalElement) {
-    totalElement = document.createElement('li');
-    totalElement.id = 'total';
-  }
-  // Update and append totalElement to the end of the list
-  totalElement.innerText = 'Total: $' + total.toFixed(2);
-  cartItems.appendChild(totalElement);
+  document.getElementById('total').innerHTML = total.toFixed(2);
 }
 
 function removeFromCart(itemElement, name, price) {
@@ -274,9 +265,6 @@ function removeFromCart(itemElement, name, price) {
   updateTotal();
 }
 
-</script>
-
-<script>
 // JavaScript for the login page
 document.getElementById('login-button').addEventListener('click', function() {
   document.getElementById('login-popup').style.display = 'block';
@@ -293,9 +281,7 @@ document.getElementById('login-form').addEventListener('submit', function(event)
   var password = document.getElementById('password').value;
   // You can now use the email and password for authentication
 });
-</script>
 
-<script>
 // JavaScript for the checkout
 document.getElementById('checkout-cart').addEventListener('click', function() {
   // Get all cart items
@@ -306,8 +292,7 @@ document.getElementById('checkout-cart').addEventListener('click', function() {
     var itemText = item.innerText;
     var name = itemText.split(' (')[0];
     var quantity = parseInt(itemText.split(' x ')[1]);
-
-    itemsToUpdate.push({ name: name, quantity: quantity });
+    itemsToUpdate.push({ name: name, quantity: quantity, itemID: item.dataset.itemID });
   });
 
   // Send POST request to update quantities
@@ -316,7 +301,7 @@ document.getElementById('checkout-cart').addEventListener('click', function() {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ itemsToUpdate: itemsToUpdate }),
+    body: JSON.stringify({ itemsToUpdate: itemsToUpdate, total: document.getElementById('total').innerHTML }),
   })
     .then(response => response.json())
     .then(updatedItems => {
