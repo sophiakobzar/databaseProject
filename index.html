@@ -74,7 +74,7 @@
 					margin: 15% auto;
 					padding: 20px;
 					border: 1px solid #888;
-					width: 80%;
+					width: 60%;
 				  }
 			</style>
 			<style>
@@ -114,14 +114,24 @@
 			  border: none;
 			  cursor: pointer;
       }
-      #removeButton {
+      #removeButton{
         font-size: 15px;
         background-color: white;
 			  color: #4CAF50;
-			  padding: 5px 20px;
-			  border: none;
+			  padding: 0px 10px;
 			  cursor: pointer;
         text-decoration: underline;
+        float: right;
+        border: none;
+      }
+      #incrementButton, #decrementButton{ 
+        font-size: 18px;
+        background-color: white;
+			  color: #4CAF50;
+			  padding: 0px 10px;
+			  cursor: pointer;
+        float: right;
+        border: none;
       }
       #removeButton:hover {
         text-decoration: none;
@@ -274,6 +284,19 @@ function addToCart(name, price, itemID) {
     existingItem.childNodes[0].nodeValue = name + ' (' + price + ') x ' + (existingQuantity + 1);
   } else {
     var li = document.createElement('li');
+    // Create the "increment" and "decrement" button
+    var decrementButton = document.createElement('button');
+    var incrementButton = document.createElement('button');
+    incrementButton.id = 'incrementButton';
+    decrementButton.id = 'decrementButton';
+    decrementButton.innerText = '-';
+    incrementButton.innerText = '+';
+    incrementButton.addEventListener('click', function() {
+      changeQuantity(li, name, price, '+');
+    });
+    decrementButton.addEventListener('click', function() {
+      changeQuantity(li, name, price, '-');
+    });
     // Create and append the "Remove" button
     var removeButton = document.createElement('button');
     removeButton.innerText = 'Remove';
@@ -284,6 +307,8 @@ function addToCart(name, price, itemID) {
     li.dataset.itemID = itemID;
     li.appendChild(document.createTextNode(name + ' (' + price + ') x 1'));
     li.appendChild(removeButton);
+    li.appendChild(decrementButton);
+    li.appendChild(incrementButton);
     cartItems.appendChild(li);
   }
   updateTotal();
@@ -306,16 +331,29 @@ function updateTotal() {
   document.getElementById('total').innerHTML = total.toFixed(2);
 }
 
+function changeQuantity(itemElement, name, price, action) {
+  var quantityText = itemElement.childNodes[0].nodeValue.split(' x ')[1];
+  var quantity = parseInt(quantityText);
+  if (action == '-'){
+    if (quantity > 1){
+      // Decrease quantity by 1
+      itemElement.childNodes[0].nodeValue = name + ' (' + price + ') x ' + (quantity - 1);
+    } else {
+      // Remove item from cart
+      itemElement.parentElement.removeChild(itemElement);
+    }
+  } else if (action == '+') {
+    itemElement.childNodes[0].nodeValue = name + ' (' + price + ') x ' + (quantity + 1);
+  }
+  updateTotal();
+}
+
 function removeFromCart(itemElement, name, price) {
   var quantityText = itemElement.childNodes[0].nodeValue.split(' x ')[1];
   var quantity = parseInt(quantityText);
-  if (quantity > 1) {
-    // Decrease quantity by 1
-    itemElement.childNodes[0].nodeValue = name + ' (' + price + ') x ' + (quantity - 1);
-  } else {
-    // Remove item from cart
-    itemElement.parentElement.removeChild(itemElement);
-  }
+  quantity = 0;
+  itemElement.parentElement.removeChild(itemElement);
+  
   updateTotal();
 }
 
