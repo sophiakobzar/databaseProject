@@ -106,7 +106,8 @@
 			}
 			</style>
       <style>
-      #checkout-cart, #close-cart, #checkout-as-guest, .add-to-cart,#removeButton{
+      #checkout-cart, #close-cart, #checkout-as-guest, 
+      #checkout-as-guest-confirm, .add-to-cart,#removeButton{
         background-color: #4CAF50;
 			  color: white;
 			  padding: 10px 20px;
@@ -114,7 +115,8 @@
 			  cursor: pointer;
       }
 			#cart-button:hover, #checkout-cart:hover, #close-cart:hover,
-      #checkout-as-guest:hover, .add-to-cart:hover, #removeButton:hover{
+      #checkout-as-guest:hover, .add-to-cart:hover, #removeButton:hover,
+      #checkout-as-guest-confirm:hover{
 			  opacity: 0.8;
 			}
       </style>
@@ -154,11 +156,11 @@
         <input type="Payment-Method" id="Payment-Method" name="Payment-Method"><br>
         <label for="Address">Address:</label><br>
         <input type="Address (Street Address, Zipcode)" id="Address" name="email"><br>
-        <button id= 'checkout-as-guest-confirm'>Checkout as Guest</button>
       </form>
       <span id = 'error-guest-login' style="display: none;">Please fill out all fields</span>
       <button id="close-cart">Close</button>
       <button id="checkout-cart">Check out</button>
+      <button id= 'checkout-as-guest-confirm' style="display: none;">Checkout as Guest</button>
       <div id="checkout-login" style="display: none;">
           <p><b> Not currently Logged in. 
             Please log in or click below to Checkout as Guest.</b></p>
@@ -329,10 +331,12 @@ document.getElementById('checkout-cart').addEventListener('click', function() {
 document.getElementById('checkout-as-guest').addEventListener('click', function(){
   document.getElementById("checkout-login").style.display = 'none';
   document.getElementById("guest-login-form").style.display = 'block';
+  document.getElementById("checkout-as-guest-confirm").style.display = 'initial';
+  document.getElementById("checkout-cart").style.display = 'none';
 })
 document.getElementById('checkout-as-guest-confirm').addEventListener('click', function(){
-  if(document.getElementById("Name") && document.getElementById("email") &&
-  document.getElementById("Payment-Method") && document.getElementById("Address") && document.getElementById("Name")){
+  if(document.getElementById("Name").value && document.getElementById("email").value &&
+  document.getElementById("Payment-Method").value && document.getElementById("Address").value && document.getElementById("Name").value){
     checkout()
   }else{
     document.getElementById('error-guest-login').style.display = 'block';
