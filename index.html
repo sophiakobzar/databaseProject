@@ -150,12 +150,12 @@
       <form id="guest-login-form" style = "display: none;">
         <label for="Name">Name:</label><br>
         <input type="Name" id="Name" name="Name"><br>
-        <label for="email">Email:</label><br>
-        <input type="email" id="email" name="email"><br>
-        <label for="Payment Method">Payment Method:</label><br>
+        <label for="gemail">Email:</label><br>
+        <input type="gemail" id="gemail" name="gemail"><br>
+        <label for="Payment Method">Payment Method(Card Number / CVV):</label><br>
         <input type="Payment-Method" id="Payment-Method" name="Payment-Method"><br>
-        <label for="Address">Address:</label><br>
-        <input type="Address (Street Address, Zipcode)" id="Address" name="email"><br>
+        <label for="address">Address (Street Address, Zipcode):</label><br>
+        <input type="address" id="address" name="address"><br>
       </form>
       <span id = 'error-guest-login' style="display: none;">Please fill out all fields</span>
       <button id="close-cart">Close</button>
@@ -279,6 +279,7 @@ function updateTotal() {
   var cartItems = document.getElementById('cart-items');
   // Remove totalElement from the list before calculating the new total
   total=0;
+
   Array.from(cartItems.children).forEach(function(item) {
     var itemText = item.innerText;
     var priceText = itemText.split('(')[1].split(')')[0];
@@ -336,11 +337,13 @@ document.getElementById('checkout-as-guest').addEventListener('click', function(
   document.getElementById("checkout-cart").style.display = 'none';
 })
 document.getElementById('checkout-as-guest-confirm').addEventListener('click', function(){
-  if(document.getElementById("Name").value && document.getElementById("email").value &&
-  document.getElementById("Payment-Method").value && document.getElementById("Address").value && document.getElementById("Name").value){
-    checkout()
+  if(document.getElementById("Name").value && document.getElementById("gemail").value &&
+  document.getElementById("Payment-Method").value && document.getElementById("address").value && document.getElementById("Name").value){
+    checkout(true)
   }else{
     document.getElementById('error-guest-login').style.display = 'block';
+    console.log(document.getElementById("Name").value +"  "+ document.getElementById("gemail").value +"  "+ 
+  document.getElementById("Payment-Method").value +"  "+ document.getElementById("address").value +"  ")
   }
 });
 document.getElementById('guest-login-form').addEventListener('submit', function(event) {
@@ -348,10 +351,10 @@ document.getElementById('guest-login-form').addEventListener('submit', function(
   // You can now use the email and password for authentication
 });
 
-function checkout(){
+function checkout(isGuest){
   var cartItems = document.getElementById('cart-items').children;
   var itemsToUpdate = [];
-
+  var order = [];
   Array.from(cartItems).forEach(function(item) {
     var itemText = item.innerText;
     var name = itemText.split(' (')[0];
@@ -359,14 +362,22 @@ function checkout(){
     itemsToUpdate.push({ name: name, quantity: quantity, itemID: item.dataset.itemID });
   });
 
+  var Customer = [];
+  if(isGuest){
+    Customer.push({Name: document.getElementById("Name").value, 
+                  PaymentMethod: document.getElementById("Payment-Method").value, 
+                  email: document.getElementById("gemail").value, 
+                  Guest: true})
+  }
+  order.push({itemsToUpdate: itemsToUpdate, customer: Customer, address: document.getElementById("address").value, total: document.getElementById('total').innerHTML })
+  console.log(order);
   // Send POST request to update quantities
   fetch('/databaseProject/update-quantities.php', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ itemsToUpdate: itemsToUpdate, total: document.getElementById('total').innerHTML }),
-  })
+    body: JSON.stringify(order),})
     .then(response => response.json())
     .then(updatedItems => {
       console.log('Updated quantities:', updatedItems);
@@ -380,6 +391,7 @@ function checkout(){
     .catch((error) => {
       console.error('Error:', error); // this is where the error this
     });
+    document.getElementById("guest-login-form").reset()
 }
 </script>
 
