@@ -494,6 +494,8 @@ function checkout(isGuest){
                   PaymentMethod: document.getElementById("Payment-Method").value, 
                   email: document.getElementById("gemail").value, 
                   Guest: true})
+  }else{
+    Customer.push({customerid: document.getElementById("customer-id")})
   }
   order.push({itemsToUpdate: itemsToUpdate, customer: Customer, address: document.getElementById("address").value, total: document.getElementById('total').innerHTML })
   console.log(order);

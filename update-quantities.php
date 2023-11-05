@@ -73,6 +73,8 @@ if ($data && isset($data['0']['itemsToUpdate']) && isset($data['0']['customer'])
     }
     $stmt->close();
 
+  }else{
+    $customerID = $data['0']['customer']['0']['customerID'];
   }
   
   // Insert the order into the `order` table
