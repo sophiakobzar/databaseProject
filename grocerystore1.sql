@@ -80,7 +80,7 @@ CREATE TABLE `order` (
   `OrderID` int(11) NOT NULL,
   `subtotal` double NOT NULL,
   `address` varchar(255) NOT NULL,
-  `discount` double NOT NULL,
+  `discount` double,
   `totalPrice` double NOT NULL,
   `CustomerID` int(11) NOT NULL
 ) ;

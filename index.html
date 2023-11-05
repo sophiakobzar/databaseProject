@@ -105,6 +105,19 @@
 			  opacity: 0.8;
 			}
 			</style>
+      <style>
+      #checkout-cart, #close-cart, #checkout-as-guest, .add-to-cart,#removeButton{
+        background-color: #4CAF50;
+			  color: white;
+			  padding: 10px 20px;
+			  border: none;
+			  cursor: pointer;
+      }
+			#cart-button:hover, #checkout-cart:hover, #close-cart:hover,
+      #checkout-as-guest:hover, .add-to-cart:hover, #removeButton:hover{
+			  opacity: 0.8;
+			}
+      </style>
 
 	</head>
 <body>
@@ -132,8 +145,26 @@
       <h2>Cart</h2>
       <ul id="cart-items"></ul>
       <h3>Total: <span id= "total"></span></h3>
+      <form id="guest-login-form" style = "display: none;">
+        <label for="Name">Name:</label><br>
+        <input type="Name" id="Name" name="Name"><br>
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email"><br>
+        <label for="Payment Method">Payment Method:</label><br>
+        <input type="Payment-Method" id="Payment-Method" name="Payment-Method"><br>
+        <label for="Address">Address:</label><br>
+        <input type="Address (Street Address, Zipcode)" id="Address" name="email"><br>
+        <button id= 'checkout-as-guest-confirm'>Checkout as Guest</button>
+      </form>
+      <span id = 'error-guest-login' style="display: none;">Please fill out all fields</span>
       <button id="close-cart">Close</button>
       <button id="checkout-cart">Check out</button>
+      <div id="checkout-login" style="display: none;">
+          <p><b> Not currently Logged in. 
+            Please log in or click below to Checkout as Guest.</b></p>
+          <button id= 'checkout-as-guest'>Checkout as Guest</button>
+        </form>
+      </div>
     </div>
   </div>
 
@@ -213,6 +244,8 @@ function addEventListeners() {
   document.getElementById('close-cart').addEventListener('click', function() {
     document.getElementById('cart').style.display = 'none';
   });
+
+
 };
 
 function addToCart(name, price, itemID) {
@@ -226,6 +259,7 @@ function addToCart(name, price, itemID) {
     // Create and append the "Remove" button
     var removeButton = document.createElement('button');
     removeButton.innerText = 'Remove';
+    removeButton.id = 'removeButton';
     removeButton.addEventListener('click', function() {
       removeFromCart(li, name, price);
     });
@@ -285,6 +319,31 @@ document.getElementById('login-form').addEventListener('submit', function(event)
 // JavaScript for the checkout
 document.getElementById('checkout-cart').addEventListener('click', function() {
   // Get all cart items
+  if(!document.getElementById("customer-id")){
+    document.getElementById("checkout-login").style.display = 'block';
+  }else{
+    checkout();
+  }
+});
+
+document.getElementById('checkout-as-guest').addEventListener('click', function(){
+  document.getElementById("checkout-login").style.display = 'none';
+  document.getElementById("guest-login-form").style.display = 'block';
+})
+document.getElementById('checkout-as-guest-confirm').addEventListener('click', function(){
+  if(document.getElementById("Name") && document.getElementById("email") &&
+  document.getElementById("Payment-Method") && document.getElementById("Address") && document.getElementById("Name")){
+    checkout()
+  }else{
+    document.getElementById('error-guest-login').style.display = 'block';
+  }
+});
+document.getElementById('guest-login-form').addEventListener('submit', function(event) {
+  event.preventDefault(); // Prevent the form from being submitted to a server
+  // You can now use the email and password for authentication
+});
+
+function checkout(){
   var cartItems = document.getElementById('cart-items').children;
   var itemsToUpdate = [];
 
@@ -316,7 +375,7 @@ document.getElementById('checkout-cart').addEventListener('click', function() {
     .catch((error) => {
       console.error('Error:', error); // this is where the error this
     });
-});
+}
 </script>
 
 </body>
