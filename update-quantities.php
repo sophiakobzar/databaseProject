@@ -81,10 +81,7 @@ if ($data && isset($data['0']['itemsToUpdate']) && isset($data['0']['customer'])
   $stmt = $conn->prepare("INSERT INTO `order` (`OrderID`, `subtotal` , `address`,  `totalPrice`, `CustomerID` ) VALUES (?, ?, ?, ?, ?)");
   $stmt->bind_param("idsdi", $orderID, $subTotal,$data['0']['address'], $totalPrice, $customerID);
   
-  if ($stmt->execute()) {
-    // Order inserted successfully
-    echo json_encode(['message' => 'Order placed successfully']);
-  } else {
+  if (!$stmt->execute()) {
     // Error occurred, log the error
     error_log("Error inserting order: " . $stmt->error);
     echo json_encode(['error' => 'Failed to place the order']);
@@ -99,10 +96,7 @@ if ($data && isset($data['0']['itemsToUpdate']) && isset($data['0']['customer'])
     $stmt = $conn->prepare("UPDATE items SET quantity = quantity - ? WHERE itemID = ?");
     $stmt->bind_param("is", $quantity, $itemID);
     
-    if ($stmt->execute()) {
-      // Quantity updated successfully
-      echo json_encode(['message' => 'Quantity adjusted successfully']);
-    } else {
+    if (!$stmt->execute()) {
       // Error occurred, log the error
       error_log("Error updating quantity: " . $stmt->error);
     }
@@ -118,10 +112,7 @@ if ($data && isset($data['0']['itemsToUpdate']) && isset($data['0']['customer'])
     $stmt = $conn->prepare("INSERT INTO `partof` (`OrderID`, `itemID`, `quantity`) VALUES (?, ?, ?)");
     $stmt->bind_param("iii", $orderID, $itemID, $quantity);
     
-    if ($stmt->execute()) {
-      // part of updated successfully
-      echo json_encode(['message' => 'Partof updated successfully']);
-    } else {
+    if (!$stmt->execute()) {
       // Error occurred, log the error
       error_log("Error updating partof table: " . $stmt->error);
     }
