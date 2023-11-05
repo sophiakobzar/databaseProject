@@ -107,18 +107,34 @@
 			</style>
       <style>
       #checkout-cart, #close-cart, #checkout-as-guest, 
-      #checkout-as-guest-confirm, .add-to-cart,#removeButton{
+      #checkout-as-guest-confirm, .add-to-cart{
         background-color: #4CAF50;
 			  color: white;
 			  padding: 10px 20px;
 			  border: none;
 			  cursor: pointer;
       }
+      #removeButton {
+        font-size: 15px;
+        background-color: white;
+			  color: #4CAF50;
+			  padding: 5px 20px;
+			  border: none;
+			  cursor: pointer;
+        text-decoration: underline;
+      }
+      #removeButton:hover {
+        text-decoration: none;
+      }
 			#cart-button:hover, #checkout-cart:hover, #close-cart:hover,
-      #checkout-as-guest:hover, .add-to-cart:hover, #removeButton:hover,
+      #checkout-as-guest:hover, .add-to-cart:hover,
       #checkout-as-guest-confirm:hover{
 			  opacity: 0.8;
 			}
+
+      #cart-items li{
+        margin-bottom: 10px;
+      }
       </style>
 
 	</head>
