@@ -278,6 +278,7 @@ var total = 0;
 function updateTotal() {
   var cartItems = document.getElementById('cart-items');
   // Remove totalElement from the list before calculating the new total
+  total=0;
   Array.from(cartItems.children).forEach(function(item) {
     var itemText = item.innerText;
     var priceText = itemText.split('(')[1].split(')')[0];
