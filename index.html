@@ -151,17 +151,81 @@
 <body>
   <h1>Welcome to Grocery Store</h1>
  
-  <button id="login-button" style="position: absolute; right: 12;">Login</button>
-  <div id="login-popup" style="display: none;">
-    <form id="login-form">
-      <label for="email">Email:</label><br>
-      <input type="email" id="email" name="email"><br>
-      <label for="password">Password:</label><br>
-      <input type="password" id="password" name="password"><br>
-      <input type="submit" value="Submit">
-      <button type="button" id="close-login">Close</button>
-    </form>
-  </div>
+<button id="login-button" style="position: absolute; right: 12;">Login</button>
+<div id="login-popup" style="display: none;">
+  <form id="login-form">
+    <label for="email">Email:</label><br>
+    <input type="email" id="email" name="email"><br>
+    <label for="password">Password:</label><br>
+    <input type="password" id="password" name="password"><br>
+    <input type="button" value="Submit" id="submit-button">
+    <button type="button" id="close-login">Close</button>
+    <button id="create-account-button">Create Account</button>
+	<div id="create-account-popup" style="display: none;">
+	  <form id="create-account-form">
+		<label for="name">Name:</label><br>
+		<input type="text" id="name" name="Name"><br>
+		<label for="payment-method">Payment Method:</label><br>
+		<input type="text" id="payment-method" name="Payment Method"><br>
+		<label for="email">Email:</label><br>
+		<input type="email" id="create-account-email" name="email"><br>
+		<label for="password">Password:</label><br>
+		<input type="password" id="create-account-password" name="password"><br>
+		<input type="button" value="Submit" id="create-account-submit">
+		<button type="button" id="close-create-account">Close</button>
+	  </form>
+	</div>
+  </form>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+  $("#submit-button").click(function(){
+    var email = $("#email").val();
+    var password = $("#password").val();
+    $.post("login.php",
+    {
+      email: email,
+      password: password
+    },
+    function(data, status){
+      error_log("Data: " + data + "\nStatus: " + status);
+      // Clear the input fields
+      $("#email").val('');
+      $("#password").val('');
+    });
+  });
+});
+</script>
+<script>
+$(document).ready(function(){
+  $("#create-account-submit").click(function(){
+    var name = $("#Name").val();
+    var paymentMethod = $("#Payment Method").val();
+    var email = $("#create-account-email").val();
+    var password = $("#create-account-password").val();
+    $.post("create_account.php",
+    {
+      name: name,
+      paymentMethod: paymentMethod,
+      email: email,
+      password: password
+    },
+    function(data, status){
+      console.log("Data: " + data + "\nStatus: " + status);
+      // Clear the input fields
+      $("#name").val('');
+      $("#payment-method").val('');
+      $("#create-account-email").val('');
+      $("#create-account-password").val('');
+    });
+  });
+});
+
+</script>
+
+
 
   <div id="search">
     <input id="search-input" type="text" placeholder="Search for items...">
@@ -373,6 +437,24 @@ document.getElementById('login-form').addEventListener('submit', function(event)
   var password = document.getElementById('password').value;
   // You can now use the email and password for authentication
 });
+document.getElementById('create-account-button').addEventListener('click', function() {
+  document.getElementById('create-account-popup').style.display = 'block';
+});
+document.getElementById('close-create-account').addEventListener('click', function() {
+  document.getElementById('create-account-popup').style.display = 'none';
+  // Clear the input fields
+  document.getElementById('Name').value = '';
+  document.getElementById('Payment Method').value = '';
+  document.getElementById('create-account-email').value = '';
+});
+document.getElementById('create-account-submit').addEventListener('click', function(event) {
+  var name = document.getElementById('Name').value;
+  var paymentMethod = document.getElementById('payment-method').value;
+  var email = document.getElementById('create-account-email').value;
+  // Add your account creation logic here
+});
+
+
 
 // JavaScript for the checkout
 document.getElementById('checkout-cart').addEventListener('click', function() {
