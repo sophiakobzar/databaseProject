@@ -19,7 +19,6 @@ $password = $_POST['password'];
 // Prepare and bind
 $stmt = $conn->prepare("SELECT * FROM customer WHERE email = ? AND password = ?");
 $stmt->bind_param("ss", $email, $password);
-// ... existing code ...
 
 $stmt->execute();
 
@@ -28,6 +27,8 @@ if ($result->num_rows > 0) {
   // Fetch customer data
   while($customer = $result->fetch_assoc()) {
     $customerID = $customer["customerID"];
+    $Name = $customer["Name"]; // Fetch the Name attribute
+    echo "<p>Name: " . $Name . "</p>"; // Echo the Name
     echo "<p>Customer ID: " . $customerID . "</p>";
   }
 
