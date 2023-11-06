@@ -63,11 +63,11 @@ if ($data && isset($data['0']['itemsToUpdate']) && isset($data['0']['customer'])
     $customerID = generateGuestCustomerID($conn);
     $stmt = $conn->prepare("INSERT INTO `customer` (`Name`, `customerID` , `Payment Method`,  `email`) VALUES (?, ?, ?, ?)");
     $stmt->bind_param("siss", $data['0']['customer']['0']['Name'], $customerID, $data['0']['customer']['0']['PaymentMethod'], $data['0']['customer']['0']['email']);
-    if ($stmt->execute()) {
-      // Guest Customer inserted successfully
-      echo json_encode(['message' => 'customer placed successfully']);
-    } else {
-      // Error occurred, log the error
+    if (!$stmt->execute()) {
+    //   // Guest Customer inserted successfully
+    //   echo json_encode(['message' => 'customer placed successfully']);
+    // } else {
+    //   // Error occurred, log the error
       error_log("Error inserting Customer: " . $stmt->error);
       echo json_encode(['error' => 'Failed to insert customer']);
     }
@@ -119,9 +119,9 @@ if ($data && isset($data['0']['itemsToUpdate']) && isset($data['0']['customer'])
       error_log("Error updating partof table: " . $stmt->error);
     }
     // Close the statement
-    echo json_encode(["result"=> "success"]);
     $stmt->close();
   }
+  echo json_encode(["result"=> "success"]);
   
 } else {
   // Handle invalid or missing data
