@@ -59,7 +59,7 @@ if ($data && isset($data['0']['itemsToUpdate']) && isset($data['0']['customer'])
   $orderID = generateUniqueOrderID($conn);
   $customerID;
   //if order is a guest order inserts a guest customer entry
-  if($data['0']['customer']['0']['Guest'] && $data['0']['customer']['0']['Guest'] == true){
+  if(isset($data['0']['customer']['0']['Guest'])){
     $customerID = generateGuestCustomerID($conn);
     $stmt = $conn->prepare("INSERT INTO `customer` (`Name`, `customerID` , `Payment Method`,  `email`) VALUES (?, ?, ?, ?)");
     $stmt->bind_param("siss", $data['0']['customer']['0']['Name'], $customerID, $data['0']['customer']['0']['PaymentMethod'], $data['0']['customer']['0']['email']);
@@ -119,6 +119,7 @@ if ($data && isset($data['0']['itemsToUpdate']) && isset($data['0']['customer'])
       error_log("Error updating partof table: " . $stmt->error);
     }
     // Close the statement
+    echo json_encode(["result"=> "success"]);
     $stmt->close();
   }
   

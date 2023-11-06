@@ -25,33 +25,36 @@ $stmt->execute();
 $result = $stmt->get_result();
 if ($result->num_rows > 0) {
   // Fetch customer data
+
+  $response = new stdClass();
   while($customer = $result->fetch_assoc()) {
-    $customerID = $customer["customerID"];
-    $Name = $customer["Name"]; // Fetch the Name attribute
-    echo "<p>Name: " . $Name . "</p>"; // Echo the Name
-    echo "<p>Customer ID: " . $customerID . "</p>";
+    $response->customerID = $customer["customerID"];
+    $response->Name = $customer["Name"]; // Fetch the Name attribute
   }
 
 
   // Fetch customer orders
   $orders_stmt = $conn->prepare("SELECT * FROM `order` WHERE CustomerID = ?");
-  $orders_stmt->bind_param("i", $customerID);
+  $orders_stmt->bind_param("i", $response->customerID);
 
   $orders_stmt->execute();
 
   $orders_result = $orders_stmt->get_result();
+  $customer_orders = array();
   if ($orders_result->num_rows > 0) {
-    echo "<p>Customer Orders:</p>";
     while($order = $orders_result->fetch_assoc()) {
-      echo "<p>Order ID: " . $order["OrderID"] . ", Subtotal: " . $order["subtotal"] . ", Address: " . $order["address"] . ", Total Price: " . $order["totalPrice"] . "</p>";
+      $customer_orders[] = $order;
     }
   } else {
+    $customer_orders = null;
     echo "<p>No orders found for this customer.</p>";
   }
-
+  $response->customerOrders = $customer_orders;
+  echo json_encode($response);
   $orders_stmt->close();
 } else {
   echo "<p>Invalid credentials</p>";
+  echo json_encode(array("error"=> "Invalid credentials"));
 }
 
 $stmt->close();
