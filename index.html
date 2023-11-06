@@ -190,13 +190,14 @@ $(document).ready(function(){
       password: password
     },
     function(data, status){
-      error_log("Data: " + data + "\nStatus: " + status);
+      console.log("Data: " + data + "\nStatus: " + status);
       // Clear the input fields
       $("#email").val('');
       $("#password").val('');
     });
   });
 });
+
 </script>
 <script>
 $(document).ready(function(){

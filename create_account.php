@@ -18,7 +18,6 @@ function generateCustomerID($conn) {
         // If it exists, generate a new one recursively
         return generateUniqueOrderID($conn);
     }
-    
     return $customerID; // Return the unique order ID
 }
 
