@@ -152,6 +152,7 @@
   <h1>Welcome to Grocery Store</h1>
  
 <button id="login-button" style="position: absolute; right: 12;">Login</button>
+<div id="login-result"></div> <!-- Add this line -->
 <div id="login-popup" style="display: none;">
   <form id="login-form">
     <label for="email">Email:</label><br>
@@ -180,23 +181,26 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-$(document).ready(function(){
-  $("#submit-button").click(function(){
+$(document).ready(function() {
+  $("#submit-button").click(function() {
     var email = $("#email").val();
     var password = $("#password").val();
-    $.post("login.php",
-    {
+    $.post("login.php", {
       email: email,
       password: password
-    },
-    function(data, status){
-      console.log("Data: " + data + "\nStatus: " + status);
+    }, function(data, status) {
+      //console.log("Data: " + data + "\nStatus: " + status);
+
       // Clear the input fields
       $("#email").val('');
       $("#password").val('');
+
+      // Display the response from the server
+      $("#login-result").html(data);
     });
   });
 });
+
 
 </script>
 <script>
@@ -223,6 +227,7 @@ $(document).ready(function(){
 
 </script>
 
+<button id="order-button" style="display: none;">Orders</button>
 
 
   <div id="search">
@@ -422,6 +427,8 @@ function removeFromCart(itemElement, name, price) {
 // JavaScript for the login page
 document.getElementById('login-button').addEventListener('click', function() {
   document.getElementById('login-popup').style.display = 'block';
+    document.getElementById('login-result').innerHTML = ''; // Clear the login result div
+
 });
 document.getElementById('close-login').addEventListener('click', function() {
   document.getElementById('login-popup').style.display = 'none';

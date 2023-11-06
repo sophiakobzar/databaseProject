@@ -19,9 +19,6 @@ $password = $_POST['password'];
 // Prepare and bind
 $stmt = $conn->prepare("SELECT * FROM customer WHERE email = ? AND password = ?");
 $stmt->bind_param("ss", $email, $password);
-
-// ... existing code ...
-
 // ... existing code ...
 
 $stmt->execute();
@@ -31,10 +28,9 @@ if ($result->num_rows > 0) {
   // Fetch customer data
   while($customer = $result->fetch_assoc()) {
     $customerID = $customer["customerID"];
-    echo "Customer ID: " . $customerID;
+    echo "<p>Customer ID: " . $customerID . "</p>";
   }
 
-  echo "Login successful";
 
   // Fetch customer orders
   $orders_stmt = $conn->prepare("SELECT * FROM `order` WHERE CustomerID = ?");
@@ -44,19 +40,20 @@ if ($result->num_rows > 0) {
 
   $orders_result = $orders_stmt->get_result();
   if ($orders_result->num_rows > 0) {
-    echo "Customer Orders:";
+    echo "<p>Customer Orders:</p>";
     while($order = $orders_result->fetch_assoc()) {
-      echo "\nOrder ID: " . $order["OrderID"] . ", Subtotal: " . $order["subtotal"] . ", Address: " . $order["address"] . ", Total Price: " . $order["totalPrice"];
+      echo "<p>Order ID: " . $order["OrderID"] . ", Subtotal: " . $order["subtotal"] . ", Address: " . $order["address"] . ", Total Price: " . $order["totalPrice"] . "</p>";
     }
   } else {
-    echo "\nNo orders found for this customer.\n";
+    echo "<p>No orders found for this customer.</p>";
   }
 
   $orders_stmt->close();
 } else {
-  echo "Invalid credentials";
+  echo "<p>Invalid credentials</p>";
 }
 
 $stmt->close();
 $conn->close();
+
 ?>
