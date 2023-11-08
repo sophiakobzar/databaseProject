@@ -75,14 +75,25 @@ if ($data && isset($data['0']['itemsToUpdate']) && isset($data['0']['customer'])
 
   }else{
     $customerID = $data['0']['customer']['0']['customerID'];
+	$stmt = $conn->prepare("SELECT `address` FROM `customer` WHERE `customerID` = ?");
+	$stmt->bind_param("i", $customerID);
+	$stmt->execute();
+	$result = $stmt->get_result();
+	if ($result->num_rows > 0) {
+    while($row = $result->fetch_assoc()) {
+        $data['0']['address'] = $row["address"];
+    }
+}
+$stmt->close();
+
   }
   
   // Insert the order into the `order` table
   $subTotal = $data['0']['total']; // You can set the total price here
   $totalPrice = $subTotal;
   $stmt = $conn->prepare("INSERT INTO `order` (`OrderID`, `subtotal` , `address`,  `totalPrice`, `CustomerID` ) VALUES (?, ?, ?, ?, ?)");
-  $stmt->bind_param("idsdi", $orderID, $subTotal,$data['0']['address'], $totalPrice, $customerID);
-  
+  $stmt->bind_param("idsdi", $orderID, $subTotal, $data['0']['address'], $totalPrice, $customerID);
+ 
   if (!$stmt->execute()) {
     // Error occurred, log the error
     error_log("Error inserting order: " . $stmt->error);
