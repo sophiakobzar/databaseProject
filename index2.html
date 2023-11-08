@@ -1,0 +1,92 @@
+<body>
+	<html>
+	<head>
+		<title>Grocery Store</title>
+			<style>
+					body {
+					  font-family: Arial, sans-serif;
+					  background-color: #F0F0F0;
+					}
+					h1 {
+					  color: #4CAF50;
+					}
+			</style>
+			<style>
+			  #button-a, #button-b, #button-c {
+			  background-color: #4CAF50;
+			  color: white;
+			  padding: 10px 20px;
+			  border: none;
+			  cursor: pointer;
+			  width: 10%;
+			}
+			#button-a {
+			  position: absolute;
+			  left: 12px;
+			}
+			#button-b {
+			  position: absolute;
+			  left: 50%;
+			  transform: translateX(-50%);
+			}
+			#button-c {
+			  position: absolute;
+			  right: 12px;
+			}
+			</style>
+	</head>
+<body>
+  <h1>Welcome to Grocery Store</h1>
+  
+<div>
+  <button id="button-a">Part A</button>
+  <!-- Form for button A -->
+  <div id="form-a" style="display: none;">
+    <form>
+      <label for="name">Name:</label><br>
+      <input type="text" id="name" name="name"><br>
+      <label for="email">Email:</label><br>
+      <input type="email" id="email" name="email"><br>
+      <input type="submit" value="Submit">
+    </form>
+  </div>
+</div>
+
+<div>
+  <button id="button-b">Part B</button>
+  <!-- Form for button B -->
+  <div id="form-b" style="display: none;">
+    <!-- Your form fields go here -->
+  </div>
+</div>
+
+<div>
+  <button id="button-c">Part C</button>
+  <!-- Form for button C -->
+  <div id="form-c" style="display: none;">
+    <!-- Your form fields go here -->
+  </div>
+</div>
+
+<script>
+document.getElementById('button-a').addEventListener('click', function() {
+  document.getElementById('form-a').style.display = 'block';
+  document.getElementById('form-b').style.display = 'none';
+  document.getElementById('form-c').style.display = 'none';
+});
+
+document.getElementById('button-b').addEventListener('click', function() {
+  document.getElementById('form-a').style.display = 'none';
+  document.getElementById('form-b').style.display = 'block';
+  document.getElementById('form-c').style.display = 'none';
+});
+
+document.getElementById('button-c').addEventListener('click', function() {
+  document.getElementById('form-a').style.display = 'none';
+  document.getElementById('form-b').style.display = 'none';
+  document.getElementById('form-c').style.display = 'block';
+});
+</script>
+
+</body>
+</html>

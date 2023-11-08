@@ -2,7 +2,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "grocerystore"; // change to grocerystore1 if you want with keys
+$dbname = "grocerystore"; 
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -46,8 +46,8 @@ if ($result->num_rows > 0) {
       $customer_orders[] = $order;
     }
   } else {
-    $customer_orders = null;
-    echo "<p>No orders found for this customer.</p>";
+    $customer_orders = array();
+    $response->message = "No orders found for this customer.";
   }
   $response->customerOrders = $customer_orders;
   echo json_encode($response);
