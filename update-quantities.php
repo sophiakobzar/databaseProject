@@ -61,8 +61,8 @@ if ($data && isset($data['0']['itemsToUpdate']) && isset($data['0']['customer'])
   //if order is a guest order inserts a guest customer entry
   if(isset($data['0']['customer']['0']['Guest'])){
     $customerID = generateGuestCustomerID($conn);
-    $stmt = $conn->prepare("INSERT INTO `customer` (`Name`, `customerID` , `Payment Method`,  `email`) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("siss", $data['0']['customer']['0']['Name'], $customerID, $data['0']['customer']['0']['PaymentMethod'], $data['0']['customer']['0']['email']);
+    $stmt = $conn->prepare("INSERT INTO `customer` (`Name`, `customerID` , `Payment Method`,  `email`, `address`) VALUES (?, ?, ?, ?, ?)");
+    $stmt->bind_param("sisss", $data['0']['customer']['0']['Name'], $customerID, $data['0']['customer']['0']['PaymentMethod'], $data['0']['customer']['0']['email'], $data['0']['address']);
     if (!$stmt->execute()) {
     //   // Guest Customer inserted successfully
     //   echo json_encode(['message' => 'customer placed successfully']);
