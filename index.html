@@ -74,7 +74,7 @@
 					margin: 15% auto;
 					padding: 20px;
 					border: 1px solid #888;
-					width: 80%;
+					width: 60%;
 				  }
 			</style>
 			<style>
@@ -86,7 +86,6 @@
 			  cursor: pointer;
 			  width: 25%;
 			  float: right
-			  margin-left:0;
 			}
 			#cart-button:hover {
 			  opacity: 0.8;
@@ -101,28 +100,158 @@
 			  cursor: pointer;
 			  width: 10%;
 			  float: right
-			  margin-left:0;
 			}
 			#cart-button:hover {
 			  opacity: 0.8;
 			}
 			</style>
+      <style>
+      #checkout-cart, #close-cart, #checkout-as-guest, 
+      #checkout-as-guest-confirm, .add-to-cart{
+        background-color: #4CAF50;
+			  color: white;
+			  padding: 10px 20px;
+			  border: none;
+			  cursor: pointer;
+      }
+      #removeButton{
+        font-size: 15px;
+        background-color: white;
+			  color: #4CAF50;
+			  padding: 0px 10px;
+			  cursor: pointer;
+        text-decoration: underline;
+        float: right;
+        border: none;
+      }
+      #incrementButton, #decrementButton{ 
+        font-size: 18px;
+        background-color: white;
+			  color: #4CAF50;
+			  padding: 0px 10px;
+			  cursor: pointer;
+        float: right;
+        border: none;
+      }
+      #removeButton:hover {
+        text-decoration: none;
+      }
+			#cart-button:hover, #checkout-cart:hover, #close-cart:hover,
+      #checkout-as-guest:hover, .add-to-cart:hover,
+      #checkout-as-guest-confirm:hover{
+			  opacity: 0.8;
+			}
+
+      #cart-items li{
+        margin-bottom: 10px;
+      }
+      </style>
 
 	</head>
 <body>
   <h1>Welcome to Grocery Store</h1>
+  
  
-  <button id="login-button" style="position: absolute; right: 12;">Login</button>
-  <div id="login-popup" style="display: none;">
-    <form id="login-form">
-      <label for="email">Email:</label><br>
-      <input type="email" id="email" name="email"><br>
-      <label for="password">Password:</label><br>
-      <input type="password" id="password" name="password"><br>
-      <input type="submit" value="Submit">
-      <button type="button" id="close-login">Close</button>
-    </form>
-  </div>
+<button id="login-button" style="position: absolute; right: 12;">Login</button>
+<div id="login-result"></div> 
+<div id="login-popup" style="display: none;">
+  <form id="login-form">
+    <label for="email">Email:</label><br>
+    <input type="email" id="email" name="email"><br>
+    <label for="password">Password:</label><br>
+    <input type="password" id="password" name="password"><br>
+    <input type="button" value="Submit" id="submit-button">
+    <button type="button" id="close-login">Close</button>
+    <button id="create-account-button">Create Account</button>
+  </form>
+	<div id="create-account-popup" style="display: none;">
+	  <form id="create-account-form">
+		<label for="new-account-name">Name:</label><br>
+		<input type="text" id="new-account-name" name="Name"><br>
+		<label for="new-payment-method">Payment Method:</label><br>
+		<input type="text" id="new-payment-method" name="Payment Method"><br>
+		<label for="email">Email:</label><br>
+		<input type="email" id="create-account-email" name="email"><br>
+		<label for="password">Password:</label><br>
+		<input type="password" id="create-account-password" name="password"><br>
+		<input type="button" value="Submit" id="create-account-submit">
+		<button type="button" id="close-create-account">Close</button>
+	  </form>
+	</div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+$(document).ready(function() {
+  $("#submit-button").click(function() {
+    var email = $("#email").val();
+    var password = $("#password").val();
+    $.post("login.php", {
+      email: email,
+      password: password
+    }, function(data, status) {
+      //console.log("Data: " + data + "\nStatus: " + status);
+
+      // Clear the input fields
+      $("#email").val('');
+      $("#password").val('');
+
+      // Display the response from the server
+      $("#login-result").html(data);
+      const response  = JSON.parse(data);
+     if(response.error){
+      $("#login-result").html(response.error);
+     }else{
+      var customerOrders = "";
+      if(response.customerOrders != null){
+        response.customerOrders.forEach((element)=>
+        customerOrders += "<p>Order ID: " + element.OrderID + ", Subtotal $" + element.subtotal + ", Address " + element.address + ", Total Price: $" + element.totalPrice + "</p>"
+        );
+      }else{
+        customerOrders = "No Orders for this Customer";
+      }
+      $("#login-result").html(
+        "<p>Name: " + response.Name +"</p>" +
+        "<p>Customer ID: " + response.customerID +"</p>"+
+        "<p>" + customerOrders + "</p>"
+      );
+      document.customer_id = response.customerID
+      $("#login-result").attr("customer_id", response.customerID);
+      console.log(document.customer_id);
+     }
+      console.log(response);
+    });
+  });
+});
+
+
+</script>
+<script>
+$(document).ready(function(){
+  $("#create-account-submit").click(function(){
+    var name = $("#new-account-name").val();
+    var paymentMethod = $("#new-payment-method").val();
+    var email = $("#create-account-email").val();
+    var password = $("#create-account-password").val();
+    $.post("create_account.php",
+    {
+      Name: name,
+      PaymentMethod: paymentMethod,
+      email: email,
+      password: password
+    },
+    function(data, status){
+      console.log("Data: " + data + "\nStatus: " + status);
+      // Clear the input fields
+      $('#create-account-form').trigger("reset");
+    });
+  });
+});
+
+</script>
+
+<button id="order-button" style="display: none;">Orders</button>
+
 
   <div id="search">
     <input id="search-input" type="text" placeholder="Search for items...">
@@ -133,8 +262,27 @@
     <div id="cart-content">
       <h2>Cart</h2>
       <ul id="cart-items"></ul>
+      <h3>Total: <span id= "total"></span></h3>
+      <form id="guest-login-form" style = "display: none;">
+        <label for="Name">Name:</label><br>
+        <input type="Name" id="Name" name="Name"><br>
+        <label for="gemail">Email:</label><br>
+        <input type="gemail" id="gemail" name="gemail"><br>
+        <label for="Payment Method">Payment Method(Card Number / CVV):</label><br>
+        <input type="Payment-Method" id="Payment-Method" name="Payment-Method"><br>
+        <label for="address">Address (Street Address, Zipcode):</label><br>
+        <input type="address" id="address" name="address"><br>
+      </form>
+      <span id = 'error-guest-login' style="display: none;">Please fill out all fields</span>
       <button id="close-cart">Close</button>
       <button id="checkout-cart">Check out</button>
+      <button id= 'checkout-as-guest-confirm' style="display: none;">Checkout as Guest</button>
+      <div id="checkout-login" style="display: none;">
+          <p><b> Not currently Logged in. 
+            Please log in or click below to Checkout as Guest.</b></p>
+          <button id= 'checkout-as-guest'>Checkout as Guest</button>
+        </form>
+      </div>
     </div>
   </div>
 
@@ -160,6 +308,7 @@ window.onload = function() {
       items.forEach(item => {
         const div = document.createElement('div');
         div.className = 'item';
+        div.dataset.itemID = item.itemID;
         div.innerHTML = `
           <img class="item-image" src="${item.imageName}" alt="${item.itemName}">
           <p class="item-name">${item.itemName}</p>
@@ -184,7 +333,7 @@ function addEventListeners() {
       var item = this.parentElement;
       var name = item.getElementsByClassName('item-name')[0].innerText;
       var price = item.getElementsByClassName('item-price')[0].innerText;
-      addToCart(name, price);
+      addToCart(name, price, item.dataset.itemID);
     });
   }
 
@@ -213,9 +362,11 @@ function addEventListeners() {
   document.getElementById('close-cart').addEventListener('click', function() {
     document.getElementById('cart').style.display = 'none';
   });
+
+
 };
 
-function addToCart(name, price) {
+function addToCart(name, price, itemID) {
   var cartItems = document.getElementById('cart-items');
   var existingItem = Array.from(cartItems.children).find(function(li) { return li.childNodes[0].nodeValue.startsWith(name); });
   if (existingItem) {
@@ -223,27 +374,43 @@ function addToCart(name, price) {
     existingItem.childNodes[0].nodeValue = name + ' (' + price + ') x ' + (existingQuantity + 1);
   } else {
     var li = document.createElement('li');
+    // Create the "increment" and "decrement" button
+    var decrementButton = document.createElement('button');
+    var incrementButton = document.createElement('button');
+    incrementButton.id = 'incrementButton';
+    decrementButton.id = 'decrementButton';
+    decrementButton.innerText = '-';
+    incrementButton.innerText = '+';
+    incrementButton.addEventListener('click', function() {
+      changeQuantity(li, name, price, '+');
+    });
+    decrementButton.addEventListener('click', function() {
+      changeQuantity(li, name, price, '-');
+    });
     // Create and append the "Remove" button
     var removeButton = document.createElement('button');
     removeButton.innerText = 'Remove';
+    removeButton.id = 'removeButton';
     removeButton.addEventListener('click', function() {
       removeFromCart(li, name, price);
     });
+    li.dataset.itemID = itemID;
     li.appendChild(document.createTextNode(name + ' (' + price + ') x 1'));
     li.appendChild(removeButton);
+    li.appendChild(decrementButton);
+    li.appendChild(incrementButton);
     cartItems.appendChild(li);
   }
   updateTotal();
 }
 
+var total = 0;
+
 function updateTotal() {
   var cartItems = document.getElementById('cart-items');
-  var totalElement = document.getElementById('total');
   // Remove totalElement from the list before calculating the new total
-  if (totalElement) {
-    cartItems.removeChild(totalElement);
-  }
-  var total = 0;
+  total=0;
+
   Array.from(cartItems.children).forEach(function(item) {
     var itemText = item.innerText;
     var priceText = itemText.split('(')[1].split(')')[0];
@@ -251,35 +418,40 @@ function updateTotal() {
     var quantity = parseInt(itemText.split(' x ')[1]);
     total += price * quantity;
   });
-  // Create totalElement if it doesn't exist
-  if (!totalElement) {
-    totalElement = document.createElement('li');
-    totalElement.id = 'total';
+  document.getElementById('total').innerHTML = total.toFixed(2);
+}
+
+function changeQuantity(itemElement, name, price, action) {
+  var quantityText = itemElement.childNodes[0].nodeValue.split(' x ')[1];
+  var quantity = parseInt(quantityText);
+  if (action == '-'){
+    if (quantity > 1){
+      // Decrease quantity by 1
+      itemElement.childNodes[0].nodeValue = name + ' (' + price + ') x ' + (quantity - 1);
+    } else {
+      // Remove item from cart
+      itemElement.parentElement.removeChild(itemElement);
+    }
+  } else if (action == '+') {
+    itemElement.childNodes[0].nodeValue = name + ' (' + price + ') x ' + (quantity + 1);
   }
-  // Update and append totalElement to the end of the list
-  totalElement.innerText = 'Total: $' + total.toFixed(2);
-  cartItems.appendChild(totalElement);
+  updateTotal();
 }
 
 function removeFromCart(itemElement, name, price) {
   var quantityText = itemElement.childNodes[0].nodeValue.split(' x ')[1];
   var quantity = parseInt(quantityText);
-  if (quantity > 1) {
-    // Decrease quantity by 1
-    itemElement.childNodes[0].nodeValue = name + ' (' + price + ') x ' + (quantity - 1);
-  } else {
-    // Remove item from cart
-    itemElement.parentElement.removeChild(itemElement);
-  }
+  quantity = 0;
+  itemElement.parentElement.removeChild(itemElement);
+  
   updateTotal();
 }
 
-</script>
-
-<script>
 // JavaScript for the login page
 document.getElementById('login-button').addEventListener('click', function() {
   document.getElementById('login-popup').style.display = 'block';
+    document.getElementById('login-result').innerHTML = ''; // Clear the login result div
+
 });
 document.getElementById('close-login').addEventListener('click', function() {
   document.getElementById('login-popup').style.display = 'none';
@@ -293,85 +465,94 @@ document.getElementById('login-form').addEventListener('submit', function(event)
   var password = document.getElementById('password').value;
   // You can now use the email and password for authentication
 });
-</script>
+document.getElementById('create-account-button').addEventListener('click', function() {
+  document.getElementById('create-account-popup').style.display = 'block';
+});
+document.getElementById('close-create-account').addEventListener('click', function() {
+  document.getElementById('create-account-form').reset()
+  document.getElementById('create-account-popup').style.display = 'none';
+  // Clear the input fields
 
-<script>
+});
+
+
+
 // JavaScript for the checkout
 document.getElementById('checkout-cart').addEventListener('click', function() {
   // Get all cart items
+  if(!document.getElementById("login-result").getAttribute("customer_id")){
+    document.getElementById("checkout-login").style.display = 'block';
+  }else{
+    console.log(document.getElementById("login-result").getAttribute("customer_id"))
+    checkout();
+  }
+});
+
+document.getElementById('checkout-as-guest').addEventListener('click', function(){
+  document.getElementById("checkout-login").style.display = 'none';
+  document.getElementById("guest-login-form").style.display = 'block';
+  document.getElementById("checkout-as-guest-confirm").style.display = 'initial';
+  document.getElementById("checkout-cart").style.display = 'none';
+})
+document.getElementById('checkout-as-guest-confirm').addEventListener('click', function(){
+  if(document.getElementById("Name").value && document.getElementById("gemail").value &&
+  document.getElementById("Payment-Method").value && document.getElementById("address").value && document.getElementById("Name").value){
+    checkout(true)
+  }else{
+    document.getElementById('error-guest-login').style.display = 'block';
+  }
+});
+document.getElementById('guest-login-form').addEventListener('submit', function(event) {
+  event.preventDefault(); // Prevent the form from being submitted to a server
+  // You can now use the email and password for authentication
+});
+
+function checkout(isGuest){
   var cartItems = document.getElementById('cart-items').children;
   var itemsToUpdate = [];
-
+  var order = [];
   Array.from(cartItems).forEach(function(item) {
     var itemText = item.innerText;
     var name = itemText.split(' (')[0];
     var quantity = parseInt(itemText.split(' x ')[1]);
-
-    itemsToUpdate.push({ name: name, quantity: quantity });
+    itemsToUpdate.push({ name: name, quantity: quantity, itemID: item.dataset.itemID });
   });
 
+  var Customer = [];
+  if(isGuest){
+    Customer.push({Name: document.getElementById("Name").value, 
+                  PaymentMethod: document.getElementById("Payment-Method").value, 
+                  email: document.getElementById("gemail").value, 
+                  Guest: true})
+  }else{
+
+    Customer.push({customerID: document.getElementById("login-result").getAttribute("customer_id")})
+  }
+  order.push({itemsToUpdate: itemsToUpdate, customer: Customer, address: document.getElementById("address").value, total: document.getElementById('total').innerHTML })
+  console.log(order);
   // Send POST request to update quantities
   fetch('/databaseProject/update-quantities.php', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ itemsToUpdate: itemsToUpdate }),
-  })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    return response.text(); // Change to text() to handle non-JSON responses
-  })
-  .then(responseText => {
-    // Check if responseText contains an error message
-    if (responseText && responseText.includes('error')) {
-      console.error('Error:', responseText); // Log the error
-    } else {
-      console.log('Quantities updated successfully');
+    body: JSON.stringify(order),})
+    .then(response => response.json())
+    .then(updatedItems => {
+      console.log('Updated quantities:', updatedItems);
       // Clear the cart
       while (cartItems.length > 0) {
         cartItems[0].parentNode.removeChild(cartItems[0]);
       }
       // Update the total
       updateTotal();
-      
-      // Send the order after updating quantities
-      sendOrder();
-    }
-  })
-  .catch(error => {
-    console.error('Error:', error); // Log the error
-  });
-});
-
-// Function to send the order
-function sendOrder() {
-  fetch('/databaseProject/sendOrder.php', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ /* order data goes here */ }),
-  })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    return response.json();
-  })
-  .then(data => {
-    // Handle the response from sendOrder.php
-    //console.log(data);
-  })
-  .catch(error => {
-    console.error('Error sending order:', error);
-  });
+    })
+    .catch((error) => {
+      console.error('Error:', error); // this is where the error this
+    });
+    document.getElementById("guest-login-form").reset()
 }
-
-</script> <! line 347>
-
+</script>
 
 </body>
 </html>
