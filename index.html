@@ -153,7 +153,7 @@
   
  
 <button id="login-button" style="position: absolute; right: 12;">Login</button>
-<div id="login-result"></div> <!-- Add this line -->
+<div id="login-result"></div> 
 <div id="login-popup" style="display: none;">
   <form id="login-form">
     <label for="email">Email:</label><br>
@@ -205,7 +205,7 @@ $(document).ready(function() {
       var customerOrders = "";
       if(response.customerOrders != null){
         response.customerOrders.forEach((element)=>
-        customerOrders += "<p>Order ID: " + element.OrderID + ", Subtotal " + element.subtotal + ", Address " + element.address + ", Total Price: " + element.totalPrice + "</p>"
+        customerOrders += "<p>Order ID: " + element.OrderID + ", Subtotal $" + element.subtotal + ", Address " + element.address + ", Total Price: $" + element.totalPrice + "</p>"
         );
       }else{
         customerOrders = "No Orders for this Customer";

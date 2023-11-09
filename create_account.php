@@ -3,7 +3,6 @@ $servername = "localhost";
 $username = "root";
 $password = "";
 $dbname = "grocerystore";
-
 function generateCustomerID($conn) {
   $customerID = mt_rand(1000, 9999); // Generate a random order ID
     $sql = "SELECT CustomerID FROM `customer` WHERE customerID = ?";
@@ -20,7 +19,6 @@ function generateCustomerID($conn) {
     }
     return $customerID; // Return the unique order ID
 }
-
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -42,9 +40,7 @@ $stmt = $conn->prepare("INSERT INTO `customer` (`Name`, `Payment Method`, `email
 $stmt->bind_param("ssssi", $name, $paymentMethod, $email, $password, $customerID);
 
 $stmt->execute();
-
 echo "Account created successfully";
-
 $stmt->close();
 $conn->close();
 ?>

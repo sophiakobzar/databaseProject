@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 06, 2023 at 02:00 AM
+-- Generation Time: Nov 08, 2023 at 06:46 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -32,25 +32,28 @@ CREATE TABLE `customer` (
   `password` varchar(255) NOT NULL,
   `customerID` int(11) NOT NULL,
   `Payment Method` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL
+  `email` varchar(255) NOT NULL,
+  `address` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `customer`
 --
 
-INSERT INTO `customer` (`Name`, `password`, `customerID`, `Payment Method`, `email`) VALUES
-('Nicky Caine', '', 2180, '4656-4563-5436-6354', 'nickyC123@gmail.com'),
-('Timmy Turner', '', 3230, '1313-4321-3411-1233', 'timGamer@gmail.com'),
-('Richard Ma', 'RM2839', 3493, '3424-2145-2938-9485', 'rm@outlook.com'),
-('Donald Duck', '', 4066, '1234-3432-4321-8775', 'duck@gmail.com'),
-('Emily Ta', 'ET1234', 4548, '2313-2345-9475-1934', 'eta2@gmail.com'),
-('Sophia Kobzar', '', 5150, '4331-3143-1324-1345', 'smk@utd.edu'),
-('Zack Martin', 'ZM1234', 6084, '1341-2342-8970-9342', 'zm@outlook.com'),
-('Bella Smith', 'BS3498', 6121, '1341-3411-3456-8534', 'bella@gmail.com'),
-('Gia Long', 'GL2928', 7191, '1231-2122-9384-8293', 'gial@gmail.com'),
-('Cody Martin', '', 8000, '5644-4545-4566-4352', 'codyM@gmail.com'),
-('Danny Turner', 'DT3452', 9956, '1231-2123-4856-9854', 'dt2004@gmail.com');
+INSERT INTO `customer` (`Name`, `password`, `customerID`, `Payment Method`, `email`, `address`) VALUES
+('Nicky Caine', '', 2180, '4656-4563-5436-6354', 'nickyC123@gmail.com', '663 New Saddle Dr. New Baltimore, MI 48047'),
+('Timmy Turner', '', 3230, '1313-4321-3411-1233', 'timGamer@gmail.com', '70 Oxford Street Garland, TX 75040'),
+('Richard Ma', 'RM2839', 3493, '3424-2145-2938-9485', 'rm@outlook.com', '475 South York St. Massillon, OH 44646'),
+('Donald Duck', '', 4066, '1234-3432-4321-8775', 'duck@gmail.com', '2613 Camp Bella Plano TX 75074'),
+('Emily Ta', 'ET1234', 4548, '2313-2345-9475-1934', 'eta2@gmail.com', '1234 Lone Star Drive Austin, TX 78701'),
+('Mary Test', '', 4682, '6543-3456-3465', 'mate@live.com', '95 Roehampton Ave. Fort Myers, FL 33905'),
+('Sophia Kobzar', 'pass', 5150, '4331-3143-1324-1345', 'smk@utd.edu', '509 3rd Court Anchorage, AK 99504'),
+('Zack Martin', 'ZM1234', 6084, '1341-2342-8970-9342', 'zm@outlook.com', '975 West Sugar Court Malvern, PA 19355'),
+('Bella Smith', 'BS3498', 6121, '1341-3411-3456-8534', 'bella@gmail.com', '8390 S. Sussex St. Glen Cove, NY 11542'),
+('Gia Long', 'GL2928', 7191, '1231-2122-9384-8293', 'gial@gmail.com', '927 3rd Ave. Buford, GA 30518'),
+('Cody Martin', '', 8000, '5644-4545-4566-4352', 'codyM@gmail.com', '7791 Pulaski Street Haines City, FL 33844'),
+('Johnny Test', '', 8496, '1231-1234-3421-3411', 'jo@gmail.com', '5432 Lone Star Drive Plano, TX 78701'),
+('Danny Turner', 'DT3452', 9956, '1231-2123-4856-9854', 'dt2004@gmail.com', '619 Central Ave. Fairhope, AL 36532');
 
 -- --------------------------------------------------------
 
@@ -73,26 +76,26 @@ CREATE TABLE `items` (
 --
 
 INSERT INTO `items` (`imageName`, `itemName`, `price`, `quantity`, `returnable`, `warehouseID`, `itemID`) VALUES
-('mayo.jpg', 'Mayonnaise', '$4.00/ea', 5, 1, 934, 284),
-('water.jpg', 'Water', '$1.50/ea', 7, 1, 384, 1029),
-('milk.jpg', 'Milk', '$0.99/lb', 7, 1, 567, 1209),
-('oj.jpg', 'Orange Juice', '$6.00/ea', 9, 1, 386, 1928),
+('mayo.jpg', 'Mayonnaise', '$4.00/ea', 3, 1, 934, 284),
+('water.jpg', 'Water', '$1.50/ea', 1, 1, 384, 1029),
+('milk.jpg', 'Milk', '$0.99/lb', 2, 1, 567, 1209),
+('oj.jpg', 'Orange Juice', '$6.00/ea', 3, 1, 386, 1928),
 ('eggs.jpg', 'Eggs', '$3.00/ea', 5, 1, 987, 2531),
-('chips.jpg', 'Chips', '$2.00/ea', 7, 1, 124, 2736),
+('chips.jpg', 'Chips', '$2.00/ea', 5, 1, 124, 2736),
 ('sriracha.jpg', 'Sriracha', '$5.00/ea', 9, 1, 111, 2938),
 ('vegetableoil.jpg', 'Vegetable Oil', '$4.50/ea', 9, 1, 439, 2948),
-('lettuce.jpg', 'Lettuce', '$1.00/lb', 5, 1, 684, 2956),
-('acv.jpg', 'Apple Cider Vinegar', '$6.00/ea', 10, 1, 822, 3937),
+('lettuce.jpg', 'Lettuce', '$1.00/lb', 4, 1, 684, 2956),
+('acv.jpg', 'Apple Cider Vinegar', '$6.00/ea', 9, 1, 822, 3937),
 ('banana.jpg', 'Banana', '$0.59/lb', 7, 1, 123, 4917),
 ('redonion.jpg', 'Red Onion', '$1.00/lb', 5, 1, 937, 4964),
-('dishsoap.jpg', 'Dishsoap', '$3.50/ea', 6, 1, 122, 5796),
-('apple.jpg', 'Apple', '$0.99/lb', 6, 1, 567, 6382),
-('grape.jpg', 'Grapes', '$2.00/lb', 10, 1, 489, 7372),
-('carrot.jpg', 'Carrot', '$0.79/lb', 8, 1, 123, 8765),
-('protein powder.jpg', 'Protein Powder', '$12.00/ea', 10, 1, 112, 9375),
-('bread.jpg', 'Bread', '$5.00/ea', 5, 1, 475, 9382),
-('orange.jpg', 'Orange', '$1.59/lb', 9, 1, 123, 9487),
-('icecream.jpg', 'Vanilla Ice Cream', '$4.00/ea', 10, 1, 839, 9549);
+('dishsoap.jpg', 'Dishsoap', '$3.50/ea', 2, 1, 122, 5796),
+('apple.jpg', 'Apple', '$0.99/lb', 3, 1, 567, 6382),
+('grape.jpg', 'Grapes', '$2.00/lb', 9, 1, 489, 7372),
+('carrot.jpg', 'Carrot', '$0.79/lb', 7, 1, 123, 8765),
+('protein powder.jpg', 'Protein Powder', '$12.00/ea', 7, 1, 112, 9375),
+('bread.jpg', 'Bread', '$5.00/ea', 4, 1, 475, 9382),
+('orange.jpg', 'Orange', '$1.59/lb', 7, 1, 123, 9487),
+('icecream.jpg', 'Vanilla Ice Cream', '$4.00/ea', 7, 1, 839, 9549);
 
 -- --------------------------------------------------------
 
@@ -114,10 +117,13 @@ CREATE TABLE `order` (
 --
 
 INSERT INTO `order` (`OrderID`, `subtotal`, `address`, `discount`, `totalPrice`, `CustomerID`) VALUES
+(10292, 5.37, '5432 Lone Star Drive Plano, TX 78701', NULL, 5.37, 8496),
 (18375, 6.49, '509 3rd Court Anchorage, AK 99504', NULL, 6.49, 5150),
 (20379, 10.5, '663 New Saddle Dr. New Baltimore, MI 48047', NULL, 10.5, 2180),
 (20699, 25.5, '2613 Camp Bella Plano TX 75074', NULL, 25.5, 4066),
+(64150, 8.49, '95 Roehampton Ave. Fort Myers, FL 33905', NULL, 8.49, 4682),
 (84483, 2.97, '70 Oxford Street Garland, TX 75040', NULL, 2.97, 3230),
+(86320, 20.99, '1234 Lone Star Drive Austin, TX 78701', NULL, 20.99, 4548),
 (86868, 9.09, '8390 S. Sussex St. Glen Cove, NY 11542', NULL, 9.09, 6121),
 (89700, 7.48, '7791 Pulaski Street Haines City, FL 33844', NULL, 7.48, 8000);
 
@@ -138,6 +144,10 @@ CREATE TABLE `partof` (
 --
 
 INSERT INTO `partof` (`OrderID`, `itemID`, `quantity`) VALUES
+(10292, 6382, 1),
+(10292, 7372, 1),
+(10292, 8765, 1),
+(10292, 9487, 1),
 (18375, 284, 1),
 (18375, 1029, 1),
 (18375, 1209, 1),
@@ -147,7 +157,13 @@ INSERT INTO `partof` (`OrderID`, `itemID`, `quantity`) VALUES
 (20699, 2736, 1),
 (20699, 2938, 1),
 (20699, 2948, 1),
+(64150, 1029, 1),
+(64150, 1209, 1),
+(64150, 1928, 1),
 (84483, 6382, 3),
+(86320, 1209, 1),
+(86320, 1928, 2),
+(86320, 9549, 2),
 (86868, 1029, 1),
 (86868, 2736, 1),
 (86868, 2938, 1),

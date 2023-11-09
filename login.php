@@ -2,7 +2,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "grocerystore"; // change to grocerystore1 if you want with keys
+$dbname = "grocerystore"; 
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -29,6 +29,7 @@ if ($result->num_rows > 0) {
   $response = new stdClass();
   while($customer = $result->fetch_assoc()) {
     $response->customerID = $customer["customerID"];
+	$response->address = $customer["address"];
     $response->Name = $customer["Name"]; // Fetch the Name attribute
   }
 
