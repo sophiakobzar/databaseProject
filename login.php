@@ -47,13 +47,11 @@ if ($result->num_rows > 0) {
     }
   } else {
     $customer_orders = null;
-    echo "<p>No orders found for this customer.</p>";
   }
   $response->customerOrders = $customer_orders;
   echo json_encode($response);
   $orders_stmt->close();
 } else {
-  echo "<p>Invalid credentials</p>";
   echo json_encode(array("error"=> "Invalid credentials"));
 }
 
