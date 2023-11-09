@@ -33,11 +33,12 @@ $name = $_POST['Name'];
 $paymentMethod = $_POST['PaymentMethod'];
 $email = $_POST['email'];
 $password = $_POST['password']; // Don't forget to hash this before inserting
+$address = $_POST['address']; 
 $customerID = generateCustomerID($conn);
 
 // Prepare and bind
-$stmt = $conn->prepare("INSERT INTO `customer` (`Name`, `Payment Method`, `email`, `password`, `customerID`) VALUES (?, ?, ?, ?, ?)");
-$stmt->bind_param("ssssi", $name, $paymentMethod, $email, $password, $customerID);
+$stmt = $conn->prepare("INSERT INTO `customer` (`Name`, `Payment Method`, `email`, `password`, `customerID`, `address`) VALUES (?, ?, ?, ?, ?, ?)");
+$stmt->bind_param("ssssis", $name, $paymentMethod, $email, $password, $customerID, $address);
 
 $stmt->execute();
 echo "Account created successfully";
