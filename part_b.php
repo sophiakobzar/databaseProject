@@ -1,26 +1,25 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "grocerystore";
+  $itemName = $_POST['itemName'];
+  $price = $_POST['price'];
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+  // Create connection
+  $conn = new mysqli("localhost", "root", "", "grocerystore");
 
-// Check connection
-if ($conn->connect_error) {
-  die("Connection failed: " . $conn->connect_error);
-}
+  // Check connection
+  if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+  }
 
-$sql = "SELECT imageName, itemID, itemName, price, quantity FROM items WHERE quantity > 0";
-$result = $conn->query($sql);
+  // Prepare SQL statement
+  $sql = "UPDATE items SET price = '$price' WHERE itemName = '$itemName'";
 
-$items = array();
-while($row = $result->fetch_assoc()) {
-  $items[] = $row;
-}
+  // Execute SQL statement
+  if ($conn->query($sql) === TRUE) {
+    echo "Record updated successfully";
+  } else {
+    echo "Error updating record: " . $conn->error;
+  }
 
-echo json_encode($items);
-
-$conn->close();
+  // Close connection
+  $conn->close();
 ?>

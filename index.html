@@ -168,12 +168,19 @@
 	  <form id="create-account-form">
 		<label for="new-account-name">Name:</label><br>
 		<input type="text" id="new-account-name" name="Name"><br>
+		
 		<label for="new-payment-method">Payment Method:</label><br>
 		<input type="text" id="new-payment-method" name="Payment Method"><br>
+		
 		<label for="email">Email:</label><br>
 		<input type="email" id="create-account-email" name="email"><br>
+		
+		<label for="addres">Address:</label><br>
+		<input type="addres" id="create-account-address" name="address"><br>
+		
 		<label for="password">Password:</label><br>
 		<input type="password" id="create-account-password" name="password"><br>
+		
 		<input type="button" value="Submit" id="create-account-submit">
 		<button type="button" id="close-create-account">Close</button>
 	  </form>
@@ -232,12 +239,14 @@ $(document).ready(function(){
     var name = $("#new-account-name").val();
     var paymentMethod = $("#new-payment-method").val();
     var email = $("#create-account-email").val();
+	var address = $("#create-account-address").val();
     var password = $("#create-account-password").val();
     $.post("create_account.php",
     {
       Name: name,
       PaymentMethod: paymentMethod,
       email: email,
+	  address: address,
       password: password
     },
     function(data, status){
