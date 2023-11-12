@@ -18,20 +18,21 @@
 </head>
 <body>
   <h1>Welcome to Grocery Store</h1>
-  
-  <div>
-    <button class="button" id="button-a">Part A</button>
-    <!-- Form for button A -->
-    <div id="form-a" style="display: none;">
-      <formaction="part_a.php" method="post">
-        <label for="name">Name:</label><br>
-        <input type="text" id="name" name="name"><br>
-        <label for="email">Email:</label><br>
-        <input type="email" id="email" name="email"><br>
-        <input type="submit" value="Submit">
-      </form>
-    </div>
-  </div>
+
+  <div id="form-a" style="display: none;">
+    <form>
+      <label for="name">Name:</label><br>
+      <input type="text" id="name" name="name"><br>
+      <label for="email">Email:</label><br>
+      <input type="email" id="email" name="email"><br>
+      <input type="submit" value="Submit">
+    </form>
+</div>
+<div>
+  <button id="button-a">Part A</button>
+</div>
+  <!-- Form for button A -->
+
 
   <div>
     <button class="button" id="button-b">Part B</button>
