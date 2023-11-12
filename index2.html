@@ -23,7 +23,7 @@
     <button class="button" id="button-a">Part A</button>
     <!-- Form for button A -->
     <div id="form-a" style="display: none;">
-      <form>
+      <formaction="part_a.php" method="post">
         <label for="name">Name:</label><br>
         <input type="text" id="name" name="name"><br>
         <label for="email">Email:</label><br>
@@ -52,7 +52,14 @@
     <button class="button" id="button-c">Part C</button>
     <!-- Form for button C -->
     <div id="form-c" style="display: none;">
-      <!-- Your form fields go here -->
+      <form action="part_c.php" method="post">
+        <label for="itemName">Item Name:</label><br>
+        <input type="text" id="itemName" name="itemName"><br>
+        <label for="price">Price:</label><br>
+        <input type="text" id="price" name="price"><br>
+        <!-- Add more fields as needed -->
+        <input type="submit" value="Submit">
+      </form>
     </div>
   </div>
 
