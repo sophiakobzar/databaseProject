@@ -11,15 +11,17 @@
   }
 
   // Prepare SQL statement
-  $sql = "UPDATE items SET price = '$price' WHERE itemName = '$itemName'";
+  $stmt = $conn->prepare("UPDATE items SET price = ? WHERE itemName = ?");
+  $stmt->bind_param("ss", $price, $itemName);
 
   // Execute SQL statement
-  if ($conn->query($sql) === TRUE) {
+  if ($stmt->execute()) {
     echo "Record updated successfully";
   } else {
-    echo "Error updating record: " . $conn->error;
+    echo "Error updating record: " . $stmt->error;
   }
 
-  // Close connection
+  // Close statement and connection
+  $stmt->close();
   $conn->close();
 ?>

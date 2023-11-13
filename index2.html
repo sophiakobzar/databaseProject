@@ -52,29 +52,79 @@
     <button class="button" id="button-c">Part C</button>
     <!-- Form for button C -->
     <div id="form-c" style="display: none;">
-      <!-- Your form fields go here -->
+      <form action="part_c.php" method="post">
+        <label for="itemName">Item Name:</label><br>
+        <input type="text" id="itemName" name="itemName"><br>
+        <label for="price">Price:</label><br>
+        <input type="text" id="price" name="price"><br>
+        <!-- Add more fields as needed -->
+        <input type="submit" value="Submit">
+      </form>
     </div>
   </div>
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
   <script>
-    document.getElementById('button-a').addEventListener('click', function() {
-      document.getElementById('form-a').style.display = 'block';
-      document.getElementById('form-b').style.display = 'none';
-      document.getElementById('form-c').style.display = 'none';
-    });
+$("#button-a").on('click', function() {
+  document.getElementById('form-a').style.display = 'block';
+  document.getElementById('form-b').style.display = 'none';
+  document.getElementById('form-c').style.display = 'none';
 
-    document.getElementById('button-b').addEventListener('click', function() {
-      document.getElementById('form-a').style.display = 'none';
-      document.getElementById('form-b').style.display = 'block';
-      document.getElementById('form-c').style.display = 'none';
+  $("#form-a form").on('submit', function(event){
+    event.preventDefault(); // Prevent form from submitting normally
+    $.ajax({
+      url: "part_a.php",
+      type: "post",
+      data: $(this).serialize(),
+      success: function(response){
+        console.log(response);
+        $("#form-a form")[0].reset(); // Reset form fields
+      }
     });
+  });
+});
 
-    document.getElementById('button-c').addEventListener('click', function() {
-      document.getElementById('form-a').style.display = 'none';
-      document.getElementById('form-b').style.display = 'none';
-      document.getElementById('form-c').style.display = 'block';
+$("#button-b").on('click', function() {
+  document.getElementById('form-a').style.display = 'none';
+  document.getElementById('form-b').style.display = 'block';
+  document.getElementById('form-c').style.display = 'none';
+
+  $("#form-b form").on('submit', function(event){
+    event.preventDefault(); // Prevent form from submitting normally
+    $.ajax({
+      url: "part_b.php",
+      type: "post",
+      data: $(this).serialize(),
+      success: function(response){
+        console.log(response);
+        $("#form-b form")[0].reset(); // Reset form fields
+      }
     });
-  </script>
+  });
+});
+
+$("#button-c").on('click', function() {
+  document.getElementById('form-a').style.display = 'none';
+  document.getElementById('form-b').style.display = 'none';
+  document.getElementById('form-c').style.display = 'block';
+
+  $("#form-c form").on('submit', function(event){
+    event.preventDefault(); // Prevent form from submitting normally
+    $.ajax({
+      url: "part_c.php",
+      type: "post",
+      data: $(this).serialize(),
+      success: function(response){
+        console.log(response);
+        $("#form-c form")[0].reset(); // Reset form fields
+      }
+    });
+  });
+});
+</script>
+
+
 
 </body>
 </html>
