@@ -1,130 +1,157 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <title>Grocery Store</title>
-  <style>
-  .button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    width: 10%;
-    display: block;
-    margin: 0 auto 20px auto; /* This adds a 20px margin to the bottom of each button */
-  }
-</style>
+	<title>Grocery Store</title>
+	<style>
+		.button {
+			background-color: #4CAF50;
+			color: white;
+			padding: 10px 20px;
+			border: none;
+			cursor: pointer;
+			width: 10%;
+			display: block;
+			margin: 0 auto 20px auto;
+			/* This adds a 20px margin to the bottom of each button */
+		}
+	</style>
 
 </head>
+
 <body>
-  <h1>Welcome to Grocery Store</h1>
-  <div>
-	<button class = "button" id="button-a">Part A</button>
-	<div id="form-a" style="display: none;">
-		<form>
-		<label for="name">Name:</label><br>
-		<input type="text" id="name" name="name"><br>
-		<label for="email">Email:</label><br>
-		<input type="email" id="email" name="email"><br>
-		<input type="submit" value="Submit">
-		</form>
+	<h1>Welcome to Grocery Store</h1>
+	<div>
+		<button class="button" id="button-a">Part A</button>
+		<div id="form-a" style="display: none;">
+			<form>
+				<label for="email">Email:</label><br>
+				<input type="text" id="email" name="email"><br>
+				<label for="password">Password:</label><br>
+				<input type="text" id="password" name="password"><br>
+				<input type="submit" value="Submit">
+			</form>
+		</div>
+		<div id="login-result"></div> 
 	</div>
-  </div>
-  <!-- Form for button A -->
+	<!-- Form for button A -->
 
 
-  <div>
-    <button class="button" id="button-b">Part B</button>
-    <!-- Form for button B -->
-    <div id="form-b" style="display: none;">
-      <form action="part_b.php" method="post">
-        <label for="itemName">Item Name:</label><br>
-        <input type="text" id="itemName" name="itemName"><br>
-        <label for="price">Price:</label><br>
-        <input type="text" id="price" name="price"><br>
-        <!-- Add more fields as needed -->
-        <input type="submit" value="Submit">
-      </form>
-    </div>
-  </div>
+	<div>
+		<button class="button" id="button-b">Part B</button>
+		<!-- Form for button B -->
+		<div id="form-b" style="display: none;">
+			<form action="part_b.php" method="post">
+				<label for="itemName">Item Name:</label><br>
+				<input type="text" id="itemName" name="itemName"><br>
+				<label for="price">Price:</label><br>
+				<input type="text" id="price" name="price"><br>
+				<!-- Add more fields as needed -->
+				<input type="submit" value="Submit">
+			</form>
+		</div>
+	</div>
 
-  <div>
-    <button class="button" id="button-c">Part C</button>
-    <!-- Form for button C -->
-    <div id="form-c" style="display: none;">
-      <form action="part_c.php" method="post">
-        <label for="itemName">Item Name:</label><br>
-        <input type="text" id="itemName" name="itemName"><br>
-        <label for="price">Price:</label><br>
-        <input type="text" id="price" name="price"><br>
-        <!-- Add more fields as needed -->
-        <input type="submit" value="Submit">
-      </form>
-    </div>
-  </div>
-  
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<div>
+		<button class="button" id="button-c">Part C</button>
+		<!-- Form for button C -->
+		<div id="form-c" style="display: none;">
+			<form action="part_c.php" method="post">
+				<label for="itemName">Item Name:</label><br>
+				<input type="text" id="itemName" name="itemName"><br>
+				<label for="price">Price:</label><br>
+				<input type="text" id="price" name="price"><br>
+				<!-- Add more fields as needed -->
+				<input type="submit" value="Submit">
+			</form>
+		</div>
+	</div>
 
-  <script>
-$("#button-a").on('click', function() {
-  document.getElementById('form-a').style.display = 'block';
-  document.getElementById('form-b').style.display = 'none';
-  document.getElementById('form-c').style.display = 'none';
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-  $("#form-a form").on('submit', function(event){
-    event.preventDefault(); // Prevent form from submitting normally
-    $.ajax({
-      url: "part_a.php",
-      type: "post",
-      data: $(this).serialize(),
-      success: function(response){
-        console.log(response);
-        $("#form-a form")[0].reset(); // Reset form fields
-      }
-    });
-  });
-});
+	<script>
+		$("#button-a").on('click', function () {
+			document.getElementById('form-a').style.display = 'block';
+			document.getElementById('form-b').style.display = 'none';
+			document.getElementById('form-c').style.display = 'none';
 
-$("#button-b").on('click', function() {
-  document.getElementById('form-a').style.display = 'none';
-  document.getElementById('form-b').style.display = 'block';
-  document.getElementById('form-c').style.display = 'none';
+			$("#form-a form").on('submit', function (event) {
+				event.preventDefault(); // Prevent form from submitting normally
+				$.ajax({
+					url: "part_a.php",
+					type: "post",
+					data: $(this).serialize(),
+					success: function (response) {
+						console.log(response);
+						response = JSON.parse(response);
+						$("#form-a form")[0].reset(); // Reset form fields
+						if (response.error) {
+							$("#login-result").html(response.error);
+						} else {
+							var customerOrders = "";
+							if (response.customerOrders != null) {
+								response.customerOrders.forEach((element) =>
+									customerOrders += "<p>Order ID: " + element.OrderID + ", Subtotal $" + element.subtotal + ", Total Price: $" + element.totalPrice + "</p>"
+								);
+							} else {
+								customerOrders = "No Orders for this Customer";
+							}
+							$("#login-result").html(
+								"<p>Name: " + response.Name + "</p>" +
+								"<p>Customer ID: " + response.customerID + "</p>" +
+								"<p>" + customerOrders + "</p>"
+							);
+							document.customer_id = response.customerID
+							$("#login-result").attr("customer_id", response.customerID);
+							console.log(document.customer_id);
+						}
+					}
+				});
+			});
+		});
 
-  $("#form-b form").on('submit', function(event){
-    event.preventDefault(); // Prevent form from submitting normally
-    $.ajax({
-      url: "part_b.php",
-      type: "post",
-      data: $(this).serialize(),
-      success: function(response){
-        console.log(response);
-        $("#form-b form")[0].reset(); // Reset form fields
-      }
-    });
-  });
-});
 
-$("#button-c").on('click', function() {
-  document.getElementById('form-a').style.display = 'none';
-  document.getElementById('form-b').style.display = 'none';
-  document.getElementById('form-c').style.display = 'block';
+		$("#button-b").on('click', function () {
+			document.getElementById('form-a').style.display = 'none';
+			document.getElementById('form-b').style.display = 'block';
+			document.getElementById('form-c').style.display = 'none';
 
-  $("#form-c form").on('submit', function(event){
-    event.preventDefault(); // Prevent form from submitting normally
-    $.ajax({
-      url: "part_c.php",
-      type: "post",
-      data: $(this).serialize(),
-      success: function(response){
-        console.log(response);
-        $("#form-c form")[0].reset(); // Reset form fields
-      }
-    });
-  });
-});
-</script>
+			$("#form-b form").on('submit', function (event) {
+				event.preventDefault(); // Prevent form from submitting normally
+				$.ajax({
+					url: "part_b.php",
+					type: "post",
+					data: $(this).serialize(),
+					success: function (response) {
+						console.log(response);
+						$("#form-b form")[0].reset(); // Reset form fields
+					}
+				});
+			});
+		});
+
+		$("#button-c").on('click', function () {
+			document.getElementById('form-a').style.display = 'none';
+			document.getElementById('form-b').style.display = 'none';
+			document.getElementById('form-c').style.display = 'block';
+
+			$("#form-c form").on('submit', function (event) {
+				event.preventDefault(); // Prevent form from submitting normally
+				$.ajax({
+					url: "part_c.php",
+					type: "post",
+					data: $(this).serialize(),
+					success: function (response) {
+						console.log(response);
+						$("#form-c form")[0].reset(); // Reset form fields
+					}
+				});
+			});
+		});
+	</script>
 
 
 
 </body>
+
 </html>
