@@ -82,7 +82,6 @@
 					type: "post",
 					data: $(this).serialize(),
 					success: function (response) {
-						console.log(response);
 						response = JSON.parse(response);
 						$("#form-a form")[0].reset(); // Reset form fields
 						if (response.error) {
@@ -103,7 +102,6 @@
 							);
 							document.customer_id = response.customerID
 							$("#login-result").attr("customer_id", response.customerID);
-							console.log(document.customer_id);
 						}
 					}
 				});
