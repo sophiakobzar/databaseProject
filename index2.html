@@ -52,12 +52,11 @@
 			</form>
 		</div>
 	</div>
-
+	
 	<div>
 		<button class="button" id="button-c">Part C</button>
-		<!-- Form for button C -->
 		<div id="form-c" style="display: none;">
-			<form action="part_c.php" method="post">
+			<form>
 				<label for="email">Email:</label><br>
 				<input type="text" id="email" name="email"><br>
 				<label for="password">Password:</label><br>
@@ -65,6 +64,7 @@
 				<input type="submit" value="Submit">
 			</form>
 		</div>
+		<div id="login-result2"></div> 
 	</div>
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -140,8 +140,27 @@
 					type: "post",
 					data: $(this).serialize(),
 					success: function (response) {
-						console.log(response);
-						$("#form-c form")[0].reset(); // Reset form fields
+						response = JSON.parse(response);
+						$("#form-a form")[0].reset(); // Reset form fields
+						if (response.error) {
+							$("#login-result2").html(response.error);
+						} else {
+							var customerOrders = "";
+							if (response.customerOrders != null) {
+								response.customerOrders.forEach((element) =>
+									customerOrders += "<p>Order ID: " + element.OrderID + ", Subtotal $" + element.subtotal + ", Total Price: $" + element.totalPrice + "</p>"
+								);
+							} else {
+								customerOrders = "No Orders for this Customer";
+							}
+							$("#login-result2").html(
+								"<p>Name: " + response.Name + "</p>" +
+								"<p>Customer ID: " + response.customerID + "</p>" +
+								"<p>" + customerOrders + "</p>"
+							);
+							document.customer_id = response.customerID
+							$("#login-result2").attr("customer_id", response.customerID);
+						}
 					}
 				});
 			});
