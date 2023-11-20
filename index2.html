@@ -51,6 +51,7 @@
 				<input type="submit" value="Submit">
 			</form>
 		</div>
+		<div id="login-result3"></div> 
 	</div>
 	
 	<div>
@@ -110,23 +111,34 @@
 
 
 		$("#button-b").on('click', function () {
-			document.getElementById('form-a').style.display = 'none';
-			document.getElementById('form-b').style.display = 'block';
-			document.getElementById('form-c').style.display = 'none';
+    document.getElementById('form-a').style.display = 'none';
+    document.getElementById('form-b').style.display = 'block';
+    document.getElementById('form-c').style.display = 'none';
 
-			$("#form-b form").on('submit', function (event) {
-				event.preventDefault(); // Prevent form from submitting normally
-				$.ajax({
-					url: "part_b.php",
-					type: "post",
-					data: $(this).serialize(),
-					success: function (response) {
-						console.log(response);
-						$("#form-b form")[0].reset(); // Reset form fields
-					}
-				});
-			});
-		});
+    $("#form-b form").on('submit', function (event) {
+        event.preventDefault(); // Prevent form from submitting normally
+        $.ajax({
+            url: "part_b.php",
+            type: "post",
+            data: $(this).serialize(),
+            success: function (response) {
+                response = JSON.parse(response);
+                $("#form-b form")[0].reset(); // Reset form fields
+                if (response.error) {
+                    $("#login-result3").html(response.error);
+                } else {
+                    $("#login-result3").html(
+                        "<p>Old name: " + response.OldName + "</p>" +
+                        "<p>New name: " + response.NewName + "</p>"
+                    );
+                    document.customer_id = response.customerID
+                    $("#login-result3").attr("customer_id", response.customerID);
+                }
+            }
+        });
+    });
+});
+
 
 		$("#button-c").on('click', function () {
 			document.getElementById('form-a').style.display = 'none';
