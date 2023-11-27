@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 08, 2023 at 06:46 PM
+-- Generation Time: Nov 27, 2023 at 06:57 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -53,6 +53,8 @@ INSERT INTO `customer` (`Name`, `password`, `customerID`, `Payment Method`, `ema
 ('Gia Long', 'GL2928', 7191, '1231-2122-9384-8293', 'gial@gmail.com', '927 3rd Ave. Buford, GA 30518'),
 ('Cody Martin', '', 8000, '5644-4545-4566-4352', 'codyM@gmail.com', '7791 Pulaski Street Haines City, FL 33844'),
 ('Johnny Test', '', 8496, '1231-1234-3421-3411', 'jo@gmail.com', '5432 Lone Star Drive Plano, TX 78701'),
+('Anna Kobzar', 'password123', 8508, '4857-1232-6544-1231', 'ak@live.com', '239 3rd Court Anchorage, AK 99504'),
+('Marry Turner', '', 9281, '3343-1231-7651-3211', 'mt@live.com', '39 E. Creek Lane Franklin Square, NY 11010'),
 ('Danny Turner', 'DT3452', 9956, '1231-2123-4856-9854', 'dt2004@gmail.com', '619 Central Ave. Fairhope, AL 36532');
 
 -- --------------------------------------------------------
@@ -76,24 +78,24 @@ CREATE TABLE `items` (
 --
 
 INSERT INTO `items` (`imageName`, `itemName`, `price`, `quantity`, `returnable`, `warehouseID`, `itemID`) VALUES
-('mayo.jpg', 'Mayonnaise', '$4.00/ea', 3, 1, 934, 284),
-('water.jpg', 'Water', '$1.50/ea', 1, 1, 384, 1029),
-('milk.jpg', 'Milk', '$0.99/lb', 2, 1, 567, 1209),
-('oj.jpg', 'Orange Juice', '$6.00/ea', 3, 1, 386, 1928),
-('eggs.jpg', 'Eggs', '$3.00/ea', 5, 1, 987, 2531),
-('chips.jpg', 'Chips', '$2.00/ea', 5, 1, 124, 2736),
-('sriracha.jpg', 'Sriracha', '$5.00/ea', 9, 1, 111, 2938),
-('vegetableoil.jpg', 'Vegetable Oil', '$4.50/ea', 9, 1, 439, 2948),
-('lettuce.jpg', 'Lettuce', '$1.00/lb', 4, 1, 684, 2956),
+('mayo.jpg', 'Mayonnaise', '$4.00/ea', 0, 1, 934, 284),
+('water.jpg', 'Water', '$1.50/ea', 0, 1, 384, 1029),
+('milk.jpg', 'Milk', '$0.99/lb', 0, 1, 567, 1209),
+('oj.jpg', 'Orange Juice', '$6.00/ea', 0, 1, 386, 1928),
+('eggs.jpg', 'Eggs', '$3.00/ea', 4, 1, 987, 2531),
+('chips.jpg', 'Chips', '$2.00/ea', 4, 1, 124, 2736),
+('sriracha.jpg', 'Sriracha', '$5.00/ea', 7, 1, 111, 2938),
+('vegetableoil.jpg', 'Vegetable Oil', '$4.50/ea', 7, 1, 439, 2948),
+('lettuce.jpg', 'Lettuce', '$1.00/lb', 3, 1, 684, 2956),
 ('acv.jpg', 'Apple Cider Vinegar', '$6.00/ea', 9, 1, 822, 3937),
 ('banana.jpg', 'Banana', '$0.59/lb', 7, 1, 123, 4917),
-('redonion.jpg', 'Red Onion', '$1.00/lb', 5, 1, 937, 4964),
+('redonion.jpg', 'Red Onion', '$1.00/lb', 4, 1, 937, 4964),
 ('dishsoap.jpg', 'Dishsoap', '$3.50/ea', 2, 1, 122, 5796),
 ('apple.jpg', 'Apple', '$0.99/lb', 3, 1, 567, 6382),
 ('grape.jpg', 'Grapes', '$2.00/lb', 9, 1, 489, 7372),
 ('carrot.jpg', 'Carrot', '$0.79/lb', 7, 1, 123, 8765),
 ('protein powder.jpg', 'Protein Powder', '$12.00/ea', 7, 1, 112, 9375),
-('bread.jpg', 'Bread', '$5.00/ea', 4, 1, 475, 9382),
+('bread.jpg', 'Bread', '$5.00/ea', 3, 1, 475, 9382),
 ('orange.jpg', 'Orange', '$1.59/lb', 7, 1, 123, 9487),
 ('icecream.jpg', 'Vanilla Ice Cream', '$4.00/ea', 7, 1, 839, 9549);
 
@@ -121,11 +123,16 @@ INSERT INTO `order` (`OrderID`, `subtotal`, `address`, `discount`, `totalPrice`,
 (18375, 6.49, '509 3rd Court Anchorage, AK 99504', NULL, 6.49, 5150),
 (20379, 10.5, '663 New Saddle Dr. New Baltimore, MI 48047', NULL, 10.5, 2180),
 (20699, 25.5, '2613 Camp Bella Plano TX 75074', NULL, 25.5, 4066),
+(33548, 10, '39 E. Creek Lane Franklin Square, NY 11010', NULL, 10, 9281),
+(63885, 6.99, '1234 Lone Star Drive Austin, TX 78701', NULL, 6.99, 4548),
 (64150, 8.49, '95 Roehampton Ave. Fort Myers, FL 33905', NULL, 8.49, 4682),
+(66578, 13.5, '1234 Lone Star Drive Austin, TX 78701', NULL, 13.5, 4548),
+(69872, 10, '1234 Lone Star Drive Austin, TX 78701', NULL, 10, 4548),
 (84483, 2.97, '70 Oxford Street Garland, TX 75040', NULL, 2.97, 3230),
 (86320, 20.99, '1234 Lone Star Drive Austin, TX 78701', NULL, 20.99, 4548),
 (86868, 9.09, '8390 S. Sussex St. Glen Cove, NY 11542', NULL, 9.09, 6121),
-(89700, 7.48, '7791 Pulaski Street Haines City, FL 33844', NULL, 7.48, 8000);
+(89700, 7.48, '7791 Pulaski Street Haines City, FL 33844', NULL, 7.48, 8000),
+(92803, 23.99, '239 3rd Court Anchorage, AK 99504', NULL, 23.99, 8508);
 
 -- --------------------------------------------------------
 
@@ -157,9 +164,20 @@ INSERT INTO `partof` (`OrderID`, `itemID`, `quantity`) VALUES
 (20699, 2736, 1),
 (20699, 2938, 1),
 (20699, 2948, 1),
+(33548, 2531, 1),
+(33548, 2938, 1),
+(33548, 2956, 1),
+(33548, 4964, 1),
+(63885, 1209, 1),
+(63885, 1928, 1),
 (64150, 1029, 1),
 (64150, 1209, 1),
 (64150, 1928, 1),
+(66578, 284, 1),
+(66578, 2948, 1),
+(66578, 9382, 1),
+(69872, 284, 1),
+(69872, 1928, 1),
 (84483, 6382, 3),
 (86320, 1209, 1),
 (86320, 1928, 2),
@@ -170,7 +188,14 @@ INSERT INTO `partof` (`OrderID`, `itemID`, `quantity`) VALUES
 (86868, 4917, 1),
 (89700, 1029, 1),
 (89700, 1209, 2),
-(89700, 2736, 2);
+(89700, 2736, 2),
+(92803, 284, 1),
+(92803, 1029, 1),
+(92803, 1209, 1),
+(92803, 1928, 1),
+(92803, 2736, 1),
+(92803, 2938, 1),
+(92803, 2948, 1);
 
 -- --------------------------------------------------------
 
